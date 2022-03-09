@@ -1,10 +1,7 @@
-package io.sharptree.maximo.app.barcodeprint;
+package io.sharptree.maximo.app.label;
 
-import psdi.mbo.MboRemote;
-import psdi.mbo.MboSetRemote;
 import psdi.server.AppService;
 import psdi.server.MXServer;
-import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
@@ -13,7 +10,7 @@ import java.rmi.RemoteException;
  *
  * @author Jason VenHuizen
  */
-public class BarcodePrintService extends AppService {
+public class LabelService extends AppService {
 
     /**
      * Creates a new instance of the BarcodePrintService class.
@@ -21,7 +18,7 @@ public class BarcodePrintService extends AppService {
      * @throws RemoteException thrown if a remote networking error occurs.
      */
     @SuppressWarnings("unused")
-    public BarcodePrintService() throws RemoteException {
+    public LabelService() throws RemoteException {
         super();
     }
 
@@ -32,7 +29,7 @@ public class BarcodePrintService extends AppService {
      * @throws RemoteException thrown if a remote networking error occurs.
      */
     @SuppressWarnings("unused")
-    public BarcodePrintService(MXServer mxServer) throws RemoteException {
+    public LabelService(MXServer mxServer) throws RemoteException {
         super(mxServer);
     }
 }

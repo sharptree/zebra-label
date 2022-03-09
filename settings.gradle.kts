@@ -1,2 +1,2 @@
-rootProject.name = "barcode-print"
+rootProject.name = "zebra-label"
 

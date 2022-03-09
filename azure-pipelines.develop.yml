@@ -11,6 +11,7 @@ pool:
 
 variables:
   - group: archiva-access
+  - group: websphere-develop
 
 steps:
   - task: InstallSSHKey@0
@@ -22,22 +23,36 @@ steps:
   # Include the common steps for building the console app
   - template: azure-pipelines.common.yml
 
-  #  - task: CmdLine@2
-  #    inputs:
-  #      script: 'mv ./common.env ./common.env'
-
   - task: CopyFilesOverSSH@0
     inputs:
-      sshEndpoint: 'barcode-print.sharptree.dev'
+      sshEndpoint: 'zebra-label.sharptree.dev'
       sourceFolder: './build/distributions'
-      contents: 'barcode-print-*.tar.gz'
+      contents: 'zebra-label-*.tar.gz'
+      targetFolder: './'
+      readyTimeout: '20000'
+  - task: CopyFilesOverSSH@0
+    inputs:
+      sshEndpoint: 'zebra-label.sharptree.dev'
+      sourceFolder: './deploy'
+      contents: '*'
       targetFolder: './'
       readyTimeout: '20000'
   - task: SSH@0
     inputs:
-      sshEndpoint: 'barcode-print.sharptree.dev'
+      sshEndpoint: 'zebra-label.sharptree.dev'
       runOptions: 'inline'
       inline: |
-        cat barcode-print-*.tar.gz | tar zxvf - -i
-      failOnStdErr: false
+        mv zebra-label*.tar.gz zebra-label.tar.gz
+        tar xzvf zebra-label.tar.gz
+        mv zebra-label-* zebra-label
+        (cd zebra-label && cp -R * /opt/IBM/SMP/)
+        (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./stopServer.sh MXServer)
+        (cd /opt/IBM/SMP/maximo/tools/maximo/ && sudo ./updatedb.sh)
+        (cd /opt/IBM/SMP/maximo/deployment/ && sudo ./buildmaximoearwas8.sh)
+        sudo cp deploy-application.py /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py 
+        sudo cp wsadminlib.py /opt/IBM/SMP/ConfigTool/scripts/wsadminlib.py 
+        ./deploy/wasenv.sh
+        sudo /opt/IBM/SMP/ConfigTool/wasclient/ThinWsadmin.sh -username "${WASADMIN_USER}" -password "${WASADMIN_PASSWORD}" -host localhost -f /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py /opt/IBM/SMP/maximo/deployment/default/maximo.ear MAXIMO maximo_host ctgCell01 ctgNode01 MXServer webserver1
+        (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./startServer.sh MXServer)
+failOnStdErr: false
       readyTimeout: '20000'

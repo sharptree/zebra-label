@@ -1,7 +1,6 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <product>
-    <name>Barcode Print</name>
+    <name>Zebra Label</name>
     <version>
         <major>1</major>
         <minor>0</minor>
@@ -9,8 +8,8 @@
         <patch>1</patch>
         <build>20220314</build>
     </version>
-    <dbmaxvarname>BARCODEPRINT</dbmaxvarname>
-    <dbscripts>barcode-print</dbscripts>
+    <dbmaxvarname>ZEBRALABEL</dbmaxvarname>
+    <dbscripts>zebralabel</dbscripts>
     <dbversion>V1000-1</dbversion>
     <lastdbversion>V1000-00</lastdbversion>
 </product>

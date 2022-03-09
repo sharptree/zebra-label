@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_02">
+    <description>Add Barcode Printing configurations.</description>
+    <statements>
+        <add_service servicename="STLABEL" description="Sharptree Label Management" classname="io.sharptree.maximo.app.label.LabelService" />
+
+        <specify_aln_domain domainid="LABELMEDIA" maxtype="ALN" length="10" description="Zebra Label Media">
+            <alnvalueinfo value="2x1" description='2" x 1"'/>
+            <alnvalueinfo value="3x1" description='3" x 1"'/>
+            <alnvalueinfo value="3x2" description='3" x 2"'/>
+            <alnvalueinfo value="4x1" description='4" x 1"'/>
+            <alnvalueinfo value="4x2" description='4" x 2"'/>
+            <alnvalueinfo value="4x3" description='4" x 3"'/>
+            <alnvalueinfo value="4x4" description='4" x 4"'/>
+            <alnvalueinfo value="4x5" description='4" x 5"'/>
+            <alnvalueinfo value="4x6" description='4" x 6"'/>
+            <alnvalueinfo value="6x4" description='6" x 4"'/>
+        </specify_aln_domain>
+
+        <define_table object="STLABEL" description="Sharptree Label Definition" service="STLABEL" classname="io.sharptree.maximo.app.label.LabelSet" type="system" mainobject="true"  primarykey="label" >
+            <attrdef attribute="LABEL" title="Label" remarks="A unique name for the label." length="20" required="true" maxtype="UPPER" searchtype="WILDCARD"/>
+            <attrdef attribute="DESCRIPTION" title="Description" remarks="The description for the label." maxtype="ALN" length="50"/>
+            <attrdef attribute="ZPL" title="ZPL" remarks="The ZPL for the label." maxtype="CLOB"/>
+            <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" required="true"/>
+        </define_table>
+
+        <define_table object="STPRINTER" description="Sharptree Label Printers" service="STLABEL" classname="io.sharptree.maximo.app.label.PrinterSet" type="system"  primarykey="PRINTER">
+            <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer." maxtype="UPPER" length="20" required="true" searchtype="WILDCARD"/>
+            <attrdef attribute="DESCRIPTION" title="Description" remarks="The description of the printer." maxtype="ALN" length="50"/>
+            <attrdef attribute="LOCATION" title="Storeroom" remarks="The storeroom where the printer is located" sameasobject="LOCATIONS" sameasattribute="LOCATION" searchtype="WILDCARD" required="true"/>
+            <attrdef attribute="SITEID" title="Site" remarks="The location site Id" sameasobject="SITE" sameasattribute="SITEID" required="true" searchtype="WILDCARD" />
+            <attrdef attribute="ORGID" title="Organization" remarks="The location organization Id" sameasobject="ORGANIZATION" sameasattribute="ORGID" required="true" searchtype="WILDCARD" />
+            <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" required="true"/>
+        </define_table>
+
+        <!-- create application for label configuration. -->
+        <create_app app="STLABEL" description="Label Configuration" maintbname="STLABEL"/>
+
+        <!-- add application to the Platform Configuration menu -->
+        <module_app app="STLABEL" module="UTIL" menu_position="after" menu_pos_param="AUTOSCRIPT"/>
+
+        <!-- create the application signature options -->
+        <add_sigoption app="STLABEL" optionname="PRINTERS" description="Configure Printers" />
+
+        <!-- create the application menu items -->
+        <create_app_menu app="STLABEL" type="action">
+            <app_menu_option option="PRINTERS" tabdisplay="MAIN" />
+        </create_app_menu>
+
+
+    </statements>
+</script>

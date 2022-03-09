@@ -10,8 +10,8 @@ group = "io.sharptree"
 version = "1.0.0"
 
 val vendor = "Sharptree"
-val product = "barcode-print"
-val distro = "barcode-print"
+val product = "zebra-label"
+val distro = "zebra-label"
 
 project.version = "1.0.0"
 
@@ -79,7 +79,7 @@ tasks.getByName("distZip").dependsOn("jar", "jar-web")
 
 tasks.register<Jar>("jar-web") {
     archiveFileName.set("${product.toLowerCase()}-web.jar")
-    include("com/tjene/maximo/webclient/**")
+    include("io/sharptree/maximo/webclient/**")
 
     from(project.the<SourceSetContainer>()["main"].output)
 }

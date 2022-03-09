@@ -1,9 +1,7 @@
-package io.sharptree.maximo.app.barcodeprint;
+package io.sharptree.maximo.app.label;
 
 import psdi.mbo.Mbo;
-import psdi.mbo.MboConstants;
 import psdi.mbo.MboSet;
-import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
@@ -12,14 +10,14 @@ import java.rmi.RemoteException;
  *
  * @author Jason VenHuizen
  */
-public class BarcodePrint extends Mbo {
+public class Printer extends Mbo {
     /**
      * Creates a new instance of BarcodePrint.
      *
      * @param ms the owning MboSet.
      * @throws RemoteException thrown if a remote networking error occurs.
      */
-    public BarcodePrint(MboSet ms) throws RemoteException {
+    public Printer(MboSet ms) throws RemoteException {
         super(ms);
     }
 }
