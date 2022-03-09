@@ -41,17 +41,18 @@ steps:
     inputs:
       sshEndpoint: 'zebra-label.sharptree.dev'
       runOptions: 'inline'
-      inline: |
+      inline: |        
         mv zebra-label*.tar.gz zebra-label.tar.gz
         tar xzvf zebra-label.tar.gz
         mv zebra-label-* zebra-label
-        (cd zebra-label && cp -R * /opt/IBM/SMP/)
+        (cd zebra-label && sudo cp -R * /opt/IBM/SMP/)
         (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./stopServer.sh MXServer)
+        sleep 60
         (cd /opt/IBM/SMP/maximo/tools/maximo/ && sudo ./updatedb.sh)
         (cd /opt/IBM/SMP/maximo/deployment/ && sudo ./buildmaximoearwas8.sh)
         sudo cp deploy-application.py /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py 
         sudo cp wsadminlib.py /opt/IBM/SMP/ConfigTool/scripts/wsadminlib.py 
-        ./deploy/wasenv.sh
+        ./wasenv.sh
         sudo /opt/IBM/SMP/ConfigTool/wasclient/ThinWsadmin.sh -username "${WASADMIN_USER}" -password "${WASADMIN_PASSWORD}" -host localhost -f /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py /opt/IBM/SMP/maximo/deployment/default/maximo.ear MAXIMO maximo_host ctgCell01 ctgNode01 MXServer webserver1
         (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./startServer.sh MXServer)
       readyTimeout: '20000'
