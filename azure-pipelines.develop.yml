@@ -8,32 +8,33 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
+  
+steps:
+  - task: InstallSSHKey@0
+    inputs:
+      knownHostsEntry: 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC7Jjdz2LqyM3femuSllOAlxvLn7iDyhiVtpNmKV/kSaS4g1egVzf5OkfShhEu54ESICkWLdOsCZ/Px8QHKz6XU='
+      sshKeySecureFile: 'azures_develop_deploy'
+      configUser: azure-deploy
 
-- task: InstallSSHKey@0
-  inputs:
-    knownHostsEntry: 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC7Jjdz2LqyM3femuSllOAlxvLn7iDyhiVtpNmKV/kSaS4g1egVzf5OkfShhEu54ESICkWLdOsCZ/Px8QHKz6XU='
-    sshKeySecureFile: 'azure_develop_deploy'
-    configUser: azure-deploy
+  # Include the common steps for building the console app
+  - template: azure-pipelines.common.yml
 
-# Include the common steps for building the console app
-- template: azure-pipelines.common.yml
+  #  - task: CmdLine@2
+  #    inputs:
+  #      script: 'mv ./common.env ./common.env'
 
-#  - task: CmdLine@2
-#    inputs:
-#      script: 'mv ./common.env ./common.env'
-
-- task: CopyFilesOverSSH@0
-  inputs:
-    sshEndpoint: '164.92.75.156'
-    sourceFolder: './build/distributions'
-    contents: 'barcode-print-*.tar.gz'
-    targetFolder: './'
-    readyTimeout: '20000'
-- task: SSH@0
-  inputs:
-    sshEndpoint: '164.92.75.156'
-    runOptions: 'inline'
-    inline: |
-      cat barcode-print-*.tar.gz | tar zxvf - -i
-    failOnStdErr: false
-    readyTimeout: '20000'
+  - task: CopyFilesOverSSH@0
+    inputs:
+      sshEndpoint: '164.92.75.156'
+      sourceFolder: './build/distributions'
+      contents: 'barcode-print-*.tar.gz'
+      targetFolder: './'
+      readyTimeout: '20000'
+  - task: SSH@0
+    inputs:
+      sshEndpoint: '164.92.75.156'
+      runOptions: 'inline'
+      inline: |
+        cat barcode-print-*.tar.gz | tar zxvf - -i
+      failOnStdErr: false
+      readyTimeout: '20000'
