@@ -1,0 +1,14 @@
+steps:
+  - checkout: self
+    submodules: true
+    persistCredentials: true
+
+  - task: Gradle@3
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'assembleDist'
+      publishJUnitResults: false
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      sonarQubeRunAnalysis: false
+      spotBugsAnalysis: false
