@@ -4,8 +4,8 @@ steps:
     persistCredentials: true
 
   - bash: |
-      echo "$(ARCHIVA_USERNAME)"
-      echo "$(ARCHIVA_PASSWORD)"
+      echo $ARCHIVA_USERNAME
+      echo $ARCHIVA_PASSWORD"
       echo "archivaUserName=$(ARCHIVA_USERNAME)" >> gradle.properties
       echo "archivaPassword=$(ARCHIVA_PASSWORD)" >> gradle.properties
 
