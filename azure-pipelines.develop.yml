@@ -25,14 +25,14 @@ steps:
 
   - task: CopyFilesOverSSH@0
     inputs:
-      sshEndpoint: '164.92.75.156'
+      sshEndpoint: 'barcode-print.sharptree.dev'
       sourceFolder: './build/distributions'
       contents: 'barcode-print-*.tar.gz'
       targetFolder: './'
       readyTimeout: '20000'
   - task: SSH@0
     inputs:
-      sshEndpoint: '164.92.75.156'
+      sshEndpoint: 'barcode-print.sharptree.dev'
       runOptions: 'inline'
       inline: |
         cat barcode-print-*.tar.gz | tar zxvf - -i
