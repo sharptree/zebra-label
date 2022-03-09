@@ -3,6 +3,10 @@ steps:
     submodules: true
     persistCredentials: true
 
+  - bash: |
+      echo "archivaUserName=$(ARCHIVA_USERNAME)" >> gradle.properties
+      echo "archivaPassword=$(ARCHIVA_PASSWORD)" >> gradle.properties
+ 
   - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
