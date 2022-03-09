@@ -13,7 +13,7 @@ steps:
   - task: InstallSSHKey@0
     inputs:
       knownHostsEntry: 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC7Jjdz2LqyM3femuSllOAlxvLn7iDyhiVtpNmKV/kSaS4g1egVzf5OkfShhEu54ESICkWLdOsCZ/Px8QHKz6XU='
-      sshKeySecureFile: 'azures_develop_deploy'
+      sshKeySecureFile: 'azure_develop_deploy'
       configUser: azure-deploy
 
   # Include the common steps for building the console app
