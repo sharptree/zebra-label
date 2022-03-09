@@ -65,6 +65,6 @@ steps:
         (cd /opt/IBM/SMP/ConfigTool/scripts/ && sudo /opt/IBM/SMP/ConfigTool/wasclient/ThinWsadmin.sh -username "${WASADMIN_USER}" -password "${WASADMIN_PASSWORD}" -host localhost -f /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py /opt/IBM/SMP/maximo/deployment/default/maximo.ear MAXIMO maximo_host ctgCell01 ctgNode01 MXServer webserver1)
         (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./startServer.sh MXServer)
         rm ./*.py 2> /dev/null
-        rm ./*.sh 2> /dev/null
+#        rm ./*.sh 2> /dev/null
         rm -rf zebra* 2> /dev/null
       readyTimeout: '20000'
