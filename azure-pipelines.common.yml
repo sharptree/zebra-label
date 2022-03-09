@@ -8,7 +8,7 @@ steps:
       echo "archivaPassword=$(ARCHIVA_PASSWORD)" >> gradle.properties
       echo "WASADMIN_USER=$(WASADMIN_USER)" >> ./deploy/wasenv.sh
       echo "WASADMIN_PASSWORD=$(WASADMIN_PASSWORD)" >> ./deploy/wasenv.sh
-      chmod ugo+x wasenv.sh
+      chmod ugo+x ./deploy/wasenv.sh
 
   - task: Gradle@3
     inputs:
