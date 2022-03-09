@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- develops
+- develop
 
 pool:
   vmImage: ubuntu-latest
@@ -18,23 +18,22 @@ pool:
   # Include the common steps for building the console app
   - template: azure-pipelines.common.yml
 
-  - task: CmdLine@2
-    inputs:
-      script: 'mv ./common.env ./common.env'
+#  - task: CmdLine@2
+#    inputs:
+#      script: 'mv ./common.env ./common.env'
 
   - task: CopyFilesOverSSH@0
     inputs:
-      sshEndpoint: 'console.sharptree.io'
+      sshEndpoint: '164.92.75.156'
       sourceFolder: './build/distributions'
       contents: 'barcode-print-*.tar.gz'
       targetFolder: './'
       readyTimeout: '20000'
   - task: SSH@0
     inputs:
-      sshEndpoint: 'console.sharptree.io'
+      sshEndpoint: '164.92.75.156'
       runOptions: 'inline'
       inline: |
-        cp -R /home/azure-deploy/web /srv/console/
-        rm -R /home/azure-deploy/web/
+        cat barcode-print-*.tar.gz | tar zxvf - -i
       failOnStdErr: false
       readyTimeout: '20000'
