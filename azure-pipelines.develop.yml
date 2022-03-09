@@ -27,9 +27,9 @@ steps:
       sshEndpoint: 'zebra-label.sharptree.dev'
       runOptions: 'inline'
       inline: |
-        rm *.py
-        rm *.sh
-        rm -rf zebra*
+        rm ./*.py 2> /dev/null
+        rm ./*.sh 2> /dev/null
+        rm -rf zebra* 2> /dev/null
       readyTimeout: '20000'
   - task: CopyFilesOverSSH@0
     inputs:
