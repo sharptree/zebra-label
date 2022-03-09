@@ -22,7 +22,15 @@ steps:
 
   # Include the common steps for building the console app
   - template: azure-pipelines.common.yml
-
+  - task: SSH@0
+    inputs:
+      sshEndpoint: 'zebra-label.sharptree.dev'
+      runOptions: 'inline'
+      inline: |
+        rm *.py
+        rm *.sh
+        rm -rf zebra*
+      readyTimeout: '20000'
   - task: CopyFilesOverSSH@0
     inputs:
       sshEndpoint: 'zebra-label.sharptree.dev'
