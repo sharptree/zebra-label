@@ -7,14 +7,14 @@ import psdi.mbo.MboSet;
 import java.rmi.RemoteException;
 
 /**
- * A MboSet for the Barcode printing configurations table.
+ * A MboSet for the Printer configuration table.
  *
  * @author Jason VenHuizen
  */
 public class PrinterSet extends MboSet {
 
     /**
-     * Creates a new instance of BarcodePrintSet.
+     * Creates a new instance of PrinterSet.
      *
      * @param ms the owning mbo server.
      * @throws RemoteException thrown if a network error occurs.
@@ -26,10 +26,11 @@ public class PrinterSet extends MboSet {
     /**
      * {@inerhitDoc}
      *
+     *
      * @see MboSet#getMboInstance(MboSet)
      */
     @Override
     protected Mbo getMboInstance(MboSet mboSet) throws RemoteException {
-        return new Label(mboSet);
+        return new Printer(mboSet);
     }
 }

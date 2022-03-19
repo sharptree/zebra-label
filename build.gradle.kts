@@ -37,17 +37,20 @@ distributions {
         extendsFrom(configurations.implementation.get())
         isCanBeResolved = true
     }
-
-    val distributionRuntime by configurations.creating {
-        extendsFrom(configurations.runtimeOnly.get())
-        isCanBeResolved = true
-    }
+//
+//    val distributionRuntime by configurations.creating {
+//        extendsFrom(configurations.runtimeOnly.get())
+//        isCanBeResolved = true
+//    }
 
     main {
         distributionBaseName.set(distro.toLowerCase())
         contents {
             into("maximo/applications/maximo/lib") {
                 from("$buildDir/libs/${product.toLowerCase()}.jar")
+            }
+            into("maximo/applications/maximo/lib") {
+                from(distribution.filter { it.name.startsWith("guava") })
             }
             into("maximo/applications/maximo/maximouiweb/webmodule/WEB-INF/lib") {
                 from("$buildDir/libs/${product.toLowerCase()}-web.jar")
@@ -105,10 +108,11 @@ tasks.jar {
 
 dependencies {
 
+    implementation("com.google.guava:guava:31.0.1-jre")
+
     compileOnly("javax.servlet:javax.servlet-api:4.0.1")
     compileOnly("com.ibm.maximo:asset-management:7.6.1.2")
     compileOnly("com.ibm.maximo:webclient:7.6.1.2")
-
     compileOnly("com.ibm.maximo:tools:7.6.0.0")
 
 }

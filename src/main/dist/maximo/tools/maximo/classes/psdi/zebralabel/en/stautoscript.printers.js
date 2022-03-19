@@ -29,6 +29,10 @@ var printers = [{
 main();
 
 function main() {
+
+
+
+
     if (typeof request !== 'undefined' && request) {
         responseBody = JSON.stringify(printers);
     }

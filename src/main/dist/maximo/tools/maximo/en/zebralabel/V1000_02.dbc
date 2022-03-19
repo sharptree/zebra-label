@@ -48,6 +48,29 @@
             <app_menu_option option="PRINTERS" tabdisplay="MAIN" />
         </create_app_menu>
 
+        <freeform description="Label Presentation Definition">
+            <sql target="sqlserver">
+                <![CDATA[
+                insert into maxpresentation(app, presentation, maxpresentationid) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?><presentation id="kurve" mboname="layout" beanclass="com.tjene.maximo.webclient.kurve.KurvePortletBean" version="7.1.0.0" trackrecent="false" ismobile="false"><page id="kurveframePage" scroll="false"><include id="INCLUDE-selfServicePageHeader" controltoclone="selfServicePageHeader"/><clientarea id="clientarea"><tabgroup id="maintabs" style="form" format="carddeck"><tab id="main" type="insert"><section id="mainSection" border="true"><sectionrow id="mainSection_row1"><sectioncol id="mainSection_col1"><section id="mainSection_sec1"><textbox id="mainSection_1" dataattribute="portlet.description" inputmode="readonly"/><textbox id="kurveconfig_1" dataattribute="kurvecfg.url" sigoption="MODIFYURL"/></section></sectioncol><sectioncol id="mainSection_col2"><section id="mainSection_sec2"><textbox id="mainSection_2" dataattribute="description"/><textbox id="kurveconfig_2" dataattribute="kurvecfg.sizey"/></section></sectioncol></sectionrow></section><buttongroup id="tableButtonGroup"><pushbutton id="tableButtonGroup_1" label="Finished" mxevent="gotostartcenter" targetid="kurve"/><pushbutton id="tableButtonGroup_2" label="Cancel" mxevent="cancel" targetid="kurve"/></buttongroup></tab></tabgroup></clientarea><include id="INCLUDE-pageFooter" controltoclone="pageFooter"/></page><configurationblock id="datastore_configurationblock"></configurationblock></presentation>', maxpresentationseq.nextval);
+                ]]>
+            </sql>
+            <sql target="oracle">
+                <![CDATA[
+                insert into maxpresentation(app, presentation, maxpresentationid) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?><presentation id="kurve" mboname="layout" beanclass="com.tjene.maximo.webclient.kurve.KurvePortletBean" version="7.1.0.0" trackrecent="false" ismobile="false"><page id="kurveframePage" scroll="false"><include id="INCLUDE-selfServicePageHeader" controltoclone="selfServicePageHeader"/><clientarea id="clientarea"><tabgroup id="maintabs" style="form" format="carddeck"><tab id="main" type="insert"><section id="mainSection" border="true"><sectionrow id="mainSection_row1"><sectioncol id="mainSection_col1"><section id="mainSection_sec1"><textbox id="mainSection_1" dataattribute="portlet.description" inputmode="readonly"/><textbox id="kurveconfig_1" dataattribute="kurvecfg.url" sigoption="MODIFYURL"/></section></sectioncol><sectioncol id="mainSection_col2"><section id="mainSection_sec2"><textbox id="mainSection_2" dataattribute="description"/><textbox id="kurveconfig_2" dataattribute="kurvecfg.sizey"/></section></sectioncol></sectionrow></section><buttongroup id="tableButtonGroup"><pushbutton id="tableButtonGroup_1" label="Finished" mxevent="gotostartcenter" targetid="kurve"/><pushbutton id="tableButtonGroup_2" label="Cancel" mxevent="cancel" targetid="kurve"/></buttongroup></tab></tabgroup></clientarea><include id="INCLUDE-pageFooter" controltoclone="pageFooter"/></page><configurationblock id="datastore_configurationblock"></configurationblock></presentation>', maxpresentationseq.nextval, maxseq.nextval);
+                ]]>
+            </sql>
+            <sql target="db2">
+                <![CDATA[
+                insert into maxpresentation(app, presentation, maxpresentationid, rowstamp) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?><presentation id="kurve" mboname="layout" beanclass="com.tjene.maximo.webclient.kurve.KurvePortletBean" version="7.1.0.0" trackrecent="false" ismobile="false"><page id="kurveframePage" scroll="false"><include id="INCLUDE-selfServicePageHeader" controltoclone="selfServicePageHeader"/><clientarea id="clientarea"><tabgroup id="maintabs" style="form" format="carddeck"><tab id="main" type="insert"><section id="mainSection" border="true"><sectionrow id="mainSection_row1"><sectioncol id="mainSection_col1"><section id="mainSection_sec1"><textbox id="mainSection_1" dataattribute="portlet.description" inputmode="readonly"/><textbox id="kurveconfig_1" dataattribute="kurvecfg.url" sigoption="MODIFYURL"/></section></sectioncol><sectioncol id="mainSection_col2"><section id="mainSection_sec2"><textbox id="mainSection_2" dataattribute="description"/><textbox id="kurveconfig_2" dataattribute="kurvecfg.sizey"/></section></sectioncol></sectionrow></section><buttongroup id="tableButtonGroup"><pushbutton id="tableButtonGroup_1" label="Finished" mxevent="gotostartcenter" targetid="kurve"/><pushbutton id="tableButtonGroup_2" label="Cancel" mxevent="cancel" targetid="kurve"/></buttongroup></tab></tabgroup></clientarea><include id="INCLUDE-pageFooter" controltoclone="pageFooter"/></page><configurationblock id="datastore_configurationblock"></configurationblock></presentation>', nextval for maxpresentationseq, NEXTVAL FOR MAXSEQ);
+                ]]>
+            </sql>
+        </freeform>
+
+        <freeform description="Message Prefrix">
+            <sql>
+                insert into maxdataprefix(prefix, product,maxdataprefixid) select 'STXAB', 'Addon Sharptree Products', maxdataprefixseq.nextval from dummy_table where not exists (select 1 from maxdataprefix where prefix = 'STXAB');
+            </sql>
+        </freeform>
 
     </statements>
 </script>

@@ -12,7 +12,7 @@ def updateModuleApp():
     AdminApp.edit(appName, ['-MapModulesToServers',[['.*', '.*', moduleList]]])
     saveAndSync()
 
-apps = AdminApp.list("WebSphere:cell="+cellName +",node="+ nodeName + ",server=" + serverName).split('\n')
+apps = listApplications()
 
 if appName in apps:
    print "Updating the application."
