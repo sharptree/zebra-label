@@ -40,13 +40,6 @@ public class PrintLabelSet extends NonPersistentMboSet {
     public void execute() throws MXException, RemoteException {
         MboRemote printLabel = getMbo(0);
 
-        if(printLabel.isNull("PRINTER")){
-            throw new MXApplicationException("sharptree","noPrinter");
-        }
-        if(printLabel.isNull("LABEL")){
-            throw new MXApplicationException("sharptree","noLabel");
-        }
-
         if(printLabel.getInt("COUNT")<1){
             throw new MXApplicationException("sharptree","countLessThanOne");
         }
@@ -60,7 +53,7 @@ public class PrintLabelSet extends NonPersistentMboSet {
         }
 
         if(printLabel.getInt("COUNT")> maxCount){
-            throw new MXApplicationException("sharptree", "countGreaterThanMax", new String[]{printLabel.getString("COUNT")});
+            throw new MXApplicationException("sharptree", "countGreaterThanMax", new String[]{printLabel.getString("COUNT"), String.valueOf(maxCount)});
         }
 
         try {

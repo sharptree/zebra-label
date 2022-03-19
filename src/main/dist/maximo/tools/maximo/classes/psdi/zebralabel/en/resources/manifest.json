@@ -1,0 +1,22 @@
+{
+    "automationScripts": [
+        {
+            "name": "STAUTOSCRIPT.ZEBRALABEL.LABELS",
+            "description": "Barcode Label Definitions",
+            "scriptFile": "stautoscript.zebralabel.labels.js",
+            "version": "1.0.0"
+        },
+        {
+            "name": "STAUTOSCRIPT.ZEBRALABEL.PRINTERS",
+            "description": "Barcode Printers",
+            "scriptFile": "stautoscript.zebralabel.printers.js",
+            "version": "1.0.0"
+        },
+        {
+            "name": "STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL",
+            "description": "Print a Barcode Label",
+            "scriptFile": "stautoscript.zebralabel.printlabel.js",
+            "version": "1.0.0"
+        }
+    ]
+}

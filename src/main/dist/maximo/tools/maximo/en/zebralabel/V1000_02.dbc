@@ -17,60 +17,138 @@
             <alnvalueinfo value="4x6" description='4" x 6"'/>
             <alnvalueinfo value="6x4" description='6" x 4"'/>
         </specify_aln_domain>
+        
+        <specify_aln_domain domainid="LABELUSEWITH" length="30" description="Label Use With Objects" >
+            <alnvalueinfo value="INVBALANCES" description="Inventory Balances"/>
+            <alnvalueinfo value="MATRECTRANS" description="Material Receipt Transactions"/>
+        </specify_aln_domain>
 
         <define_table object="STLABEL" description="Sharptree Label Definition" service="STLABEL" classname="io.sharptree.maximo.app.label.LabelSet" type="system" mainobject="true"  primarykey="label" >
-            <attrdef attribute="LABEL" title="Label" remarks="A unique name for the label." length="20" required="true" maxtype="UPPER" searchtype="WILDCARD"/>
-            <attrdef attribute="DESCRIPTION" title="Description" remarks="The description for the label." maxtype="ALN" length="50"/>
-            <attrdef attribute="ZPL" title="ZPL" remarks="The ZPL for the label." maxtype="CLOB"/>
-            <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" required="true"/>
+            <attrdef attribute="LABEL" title="Label" remarks="A unique name for the label." length="20"  maxtype="UPPER" searchtype="WILDCARD"/>
+            <attrdef attribute="DESCRIPTION" title="Description" remarks="The description for the label." maxtype="ALN" length="50" searchtype="WILDCARD"/>
+            <attrdef attribute="ZPL" title="ZPL" remarks="The ZPL for the label." maxtype="CLOB" classname="io.sharptree.maximo.app.label.FldZPL"/>
+            <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" searchtype="WILDCARD" classname="io.sharptree.maximo.app.label.FldMedia"/>
+            <attrdef attribute="DEFAULT" title="Default" remarks="Is the default label for the media type?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultLabel"/>
+            <attrdef attribute="USEWITH" title="Use With" remarks="The Maximo object name that the label can be used with." sameasobject="MAXOBJECT" sameasattribute="OBJECTNAME" searchtype="WILDCARD" domain="LABELUSEWITH" defaultvalue="INVBALANCES"/>
         </define_table>
 
         <define_table object="STPRINTER" description="Sharptree Label Printers" service="STLABEL" classname="io.sharptree.maximo.app.label.PrinterSet" type="system"  primarykey="PRINTER">
-            <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer." maxtype="UPPER" length="20" required="true" searchtype="WILDCARD"/>
+            <attrdef attribute="ADDRESS" title="Address" remarks="Host name or IP address of the printer." maxtype="ALN" length="50" classname="io.sharptree.maximo.app.label.FldAddress" searchtype="WILDCARD"/>
+            <attrdef attribute="DEFAULT" title="Default" remarks="Default printer for the specified location?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultPrinter"/>
             <attrdef attribute="DESCRIPTION" title="Description" remarks="The description of the printer." maxtype="ALN" length="50"/>
-            <attrdef attribute="LOCATION" title="Storeroom" remarks="The storeroom where the printer is located" sameasobject="LOCATIONS" sameasattribute="LOCATION" searchtype="WILDCARD" required="true"/>
-            <attrdef attribute="SITEID" title="Site" remarks="The location site Id" sameasobject="SITE" sameasattribute="SITEID" required="true" searchtype="WILDCARD" />
-            <attrdef attribute="ORGID" title="Organization" remarks="The location organization Id" sameasobject="ORGANIZATION" sameasattribute="ORGID" required="true" searchtype="WILDCARD" />
-            <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" required="true"/>
+            <attrdef attribute="LOCATION" title="Storeroom" remarks="The storeroom where the printer is located." sameasobject="LOCATIONS" sameasattribute="LOCATION" searchtype="WILDCARD" classname="io.sharptree.maximo.app.label.FldLocation"/>
+            <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" />
+            <attrdef attribute="ORGID" title="Organization" remarks="The location organization Id" sameasobject="ORGANIZATION" sameasattribute="ORGID"  searchtype="WILDCARD" classname="psdi.app.site.FldOrganizationItemSetId"/>
+            <attrdef attribute="PORT" title="Port" remarks="The port number the printer is listening on, 0 to 65535" maxtype="INTEGER" classname="io.sharptree.maximo.app.label.FldPort" defaultvalue="9100" />
+            <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer." maxtype="UPPER" length="20" searchtype="WILDCARD"/>
+            <attrdef attribute="SITEID" title="Site" remarks="The location site Id" sameasobject="SITE" sameasattribute="SITEID" searchtype="WILDCARD" classname="io.sharptree.maximo.app.label.FldSiteID" />
         </define_table>
+
+        <define_table object="STPRINTLABEL" description="Sharptree non-persistent object for printing labels." service="io.sharptree.maximo.app.label.virtual.PrintLabelSet" classname="STLABEL" type="system" persistent="false">
+            <attrdef attribute="COUNT" title="Count" remarks="The number of labels to print." maxtype="INTEGER"/>
+            <attrdef attribute="LABEL" title="Label" remarks="The label to print." sameasobject="STLABEL" sameasattribute="LABEL" classname="io.sharptree.maximo.app.label.virtual.FldLabel" />
+            <attrdef attribute="LOCATION" title="Location" remarks="Location where the label will be printed." sameasobject="LOCATIONS" sameasattribute="LOCATION" />
+            <attrdef attribute="PARENT" title="Parent" remarks="The name of the parent object." sameasobject="MAXOBJECT" sameasattribute="OBJECTNAME"/>
+            <attrdef attribute="PARENTID" title="Parent Id" remarks="The unique Id for the parent object." maxtype="BIGINT"/>
+            <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer where the label will be printed." classname="io.sharptree.maximo.app.label.virtual.FldPrinter" sameasobject="STPRINTER" sameasattribute="STPRINTER"/>
+            <attrdef attribute="SITEID" title="Site" remarks="The site identifier." classname="psdi.app.site.FldSiteID" sameasobject="SITE" sameasattribute="SITEID" />
+        </define_table>
+
+        <!-- Add the application properties -->
+        <add_property name="sharptree.zebralabel.maxcount" description="Maximum number of label copies to print." maxtype="INTEGER" secure_level="public" />
 
         <!-- create application for label configuration. -->
         <create_app app="STLABEL" description="Label Configuration" maintbname="STLABEL"/>
 
-        <!-- add application to the Platform Configuration menu -->
-        <module_app app="STLABEL" module="UTIL" menu_position="after" menu_pos_param="AUTOSCRIPT"/>
-
-        <!-- create the application signature options -->
-        <add_sigoption app="STLABEL" optionname="PRINTERS" description="Configure Printers" />
-
-        <!-- create the application menu items -->
-        <create_app_menu app="STLABEL" type="action">
-            <app_menu_option option="PRINTERS" tabdisplay="MAIN" />
-        </create_app_menu>
-
-        <freeform description="Label Presentation Definition">
-            <sql target="sqlserver">
+        <!-- Create presentation entry for the Label Configuration application -->
+        <freeform description="Label Configuration Presentation Definition">
+            <sql>
                 <![CDATA[
-                insert into maxpresentation(app, presentation, maxpresentationid) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?><presentation id="kurve" mboname="layout" beanclass="com.tjene.maximo.webclient.kurve.KurvePortletBean" version="7.1.0.0" trackrecent="false" ismobile="false"><page id="kurveframePage" scroll="false"><include id="INCLUDE-selfServicePageHeader" controltoclone="selfServicePageHeader"/><clientarea id="clientarea"><tabgroup id="maintabs" style="form" format="carddeck"><tab id="main" type="insert"><section id="mainSection" border="true"><sectionrow id="mainSection_row1"><sectioncol id="mainSection_col1"><section id="mainSection_sec1"><textbox id="mainSection_1" dataattribute="portlet.description" inputmode="readonly"/><textbox id="kurveconfig_1" dataattribute="kurvecfg.url" sigoption="MODIFYURL"/></section></sectioncol><sectioncol id="mainSection_col2"><section id="mainSection_sec2"><textbox id="mainSection_2" dataattribute="description"/><textbox id="kurveconfig_2" dataattribute="kurvecfg.sizey"/></section></sectioncol></sectionrow></section><buttongroup id="tableButtonGroup"><pushbutton id="tableButtonGroup_1" label="Finished" mxevent="gotostartcenter" targetid="kurve"/><pushbutton id="tableButtonGroup_2" label="Cancel" mxevent="cancel" targetid="kurve"/></buttongroup></tab></tabgroup></clientarea><include id="INCLUDE-pageFooter" controltoclone="pageFooter"/></page><configurationblock id="datastore_configurationblock"></configurationblock></presentation>', maxpresentationseq.nextval);
-                ]]>
-            </sql>
-            <sql target="oracle">
-                <![CDATA[
-                insert into maxpresentation(app, presentation, maxpresentationid) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?><presentation id="kurve" mboname="layout" beanclass="com.tjene.maximo.webclient.kurve.KurvePortletBean" version="7.1.0.0" trackrecent="false" ismobile="false"><page id="kurveframePage" scroll="false"><include id="INCLUDE-selfServicePageHeader" controltoclone="selfServicePageHeader"/><clientarea id="clientarea"><tabgroup id="maintabs" style="form" format="carddeck"><tab id="main" type="insert"><section id="mainSection" border="true"><sectionrow id="mainSection_row1"><sectioncol id="mainSection_col1"><section id="mainSection_sec1"><textbox id="mainSection_1" dataattribute="portlet.description" inputmode="readonly"/><textbox id="kurveconfig_1" dataattribute="kurvecfg.url" sigoption="MODIFYURL"/></section></sectioncol><sectioncol id="mainSection_col2"><section id="mainSection_sec2"><textbox id="mainSection_2" dataattribute="description"/><textbox id="kurveconfig_2" dataattribute="kurvecfg.sizey"/></section></sectioncol></sectionrow></section><buttongroup id="tableButtonGroup"><pushbutton id="tableButtonGroup_1" label="Finished" mxevent="gotostartcenter" targetid="kurve"/><pushbutton id="tableButtonGroup_2" label="Cancel" mxevent="cancel" targetid="kurve"/></buttongroup></tab></tabgroup></clientarea><include id="INCLUDE-pageFooter" controltoclone="pageFooter"/></page><configurationblock id="datastore_configurationblock"></configurationblock></presentation>', maxpresentationseq.nextval, maxseq.nextval);
-                ]]>
-            </sql>
-            <sql target="db2">
-                <![CDATA[
-                insert into maxpresentation(app, presentation, maxpresentationid, rowstamp) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?><presentation id="kurve" mboname="layout" beanclass="com.tjene.maximo.webclient.kurve.KurvePortletBean" version="7.1.0.0" trackrecent="false" ismobile="false"><page id="kurveframePage" scroll="false"><include id="INCLUDE-selfServicePageHeader" controltoclone="selfServicePageHeader"/><clientarea id="clientarea"><tabgroup id="maintabs" style="form" format="carddeck"><tab id="main" type="insert"><section id="mainSection" border="true"><sectionrow id="mainSection_row1"><sectioncol id="mainSection_col1"><section id="mainSection_sec1"><textbox id="mainSection_1" dataattribute="portlet.description" inputmode="readonly"/><textbox id="kurveconfig_1" dataattribute="kurvecfg.url" sigoption="MODIFYURL"/></section></sectioncol><sectioncol id="mainSection_col2"><section id="mainSection_sec2"><textbox id="mainSection_2" dataattribute="description"/><textbox id="kurveconfig_2" dataattribute="kurvecfg.sizey"/></section></sectioncol></sectionrow></section><buttongroup id="tableButtonGroup"><pushbutton id="tableButtonGroup_1" label="Finished" mxevent="gotostartcenter" targetid="kurve"/><pushbutton id="tableButtonGroup_2" label="Cancel" mxevent="cancel" targetid="kurve"/></buttongroup></tab></tabgroup></clientarea><include id="INCLUDE-pageFooter" controltoclone="pageFooter"/></page><configurationblock id="datastore_configurationblock"></configurationblock></presentation>', nextval for maxpresentationseq, NEXTVAL FOR MAXSEQ);
+                insert into maxpresentation(app, presentation, maxpresentationid) values('STLABEL','<?xml version="1.0" encoding="UTF-8"?> <presentation id="stlabel" ismobile="false" mboname="STLABEL" resultstableid="results_showlist" version="6.0.0"> <page id="mainrec" scroll="false"> <include controltoclone="pageHeader" id="INCLUDE-pageHeader"/> <clientarea id="clientarea"> <tabgroup id="maintabs" style="form"> <tab default="true" id="results" label="List" type="list"> <menubar event="search" id="actiontoolbar1" sourcemethod="getAppSearchOptions"/> <table id="results_showlist" inputmode="readonly" label="Labels" mboname="STLABEL" selectmode="multiple"> <tablebody displayrowsperpage="20" filterable="true" filterexpanded="true" id="results_showlist_tablebody"> <tablecol dataattribute="LABEL" filterable="false" id="results_showlist_column_select" mxevent="toggleselectrow" mxevent_desc="Select Row {0}" sortable="false" type="event"/> <tablecol dataattribute="LABEL" id="results_showlist_column_link" mxevent="selectrecord" mxevent_desc="Go To %1" type="link" usefieldsizegroup="false"/> <tablecol dataattribute="description" id="results_showlist_column1"/> <tablecol dataattribute="media" id="1646950661993" lookup="valuelist"/> <tablecol dataattribute="usewith" id="1647368356433" lookup="valuelist"/> <tablecol dataattribute="default" id="1647380116471"/> <tablecol filterable="false" id="results_bookmark" mxevent="BOOKMARK" mxevent_desc="Add to Bookmarks" mxevent_icon="btn_addtobookmarks.gif" sortable="false" type="event"/> </tablebody> </table> </tab> <tab id="main" label="Label" type="insert"> <section id="maintab_section"> <sectionrow id="1646950346090"> <sectioncol id="1646950346093"> <multiparttextbox dataattribute="label" descdataattribute="DESCRIPTION" id="1646950149101"/> <textbox dataattribute="usewith" id="1647368379056" lookup="valuelist" synchronous="true"/> </sectioncol> <sectioncol id="1647380253754"> <textbox dataattribute="media" id="1647380409182" lookup="valuelist" synchronous="true"/> </sectioncol> <sectioncol id="1646950384946"> <checkbox dataattribute="default" id="1647380230667" synchronous="true"/> </sectioncol> </sectionrow> <sectionrow id="1647380504657"> <section id="1646950414468"> <multilinetextbox columns="70" dataattribute="zpl" hidelabel="true" id="1646950420972" rows="8"/> </section> </sectionrow> </section> </tab> </tabgroup> </clientarea> <include controltoclone="pageFooter" id="INCLUDE-pageFooter"/> </page><dialog id="printers" label="Printers" mboname="STPRINTER"> <table id="1646951802504" label="Printers"> <tablebody displayrowsperpage="20" filterable="true" id="1646951862640"> <tablecol filterable="false" id="1646952158525" mxevent="toggledetailstate" mxevent_desc="Show Detail" sortable="false" type="event"/> <tablecol dataattribute="printer" id="1646951949261"/> <tablecol dataattribute="description" id="1646951966941"/> <tablecol dataattribute="address" id="1646952919340" synchronous="true"/> <tablecol dataattribute="port" id="1646952922711"/> <tablecol dataattribute="media" id="1646952513942" lookup="valuelist"/> <tablecol dataattribute="location" id="1646951987991" lookup="locations"/> <tablecol dataattribute="siteid" id="1647042382041" lookup="site"/> <tablecol dataattribute="default" id="1647042521573"/> <tablecol filterable="false" id="1646952046290" mxevent="toggledeleterow" mxevent_desc="Mark Row for Delete" mxevent_icon="btn_delete.gif" sortable="false" type="event"/> </tablebody> <tabledetails id="1646952195258"> <section border="false" id="1646952202075" label="Details"> <sectionrow id="1646952206409"> <sectioncol id="1646952440612"> <multiparttextbox dataattribute="printer" descdataattribute="description" id="1646952428408"/> <textbox dataattribute="location" id="1646952460846" lookup="locations" synchronous="true"/> <textbox dataattribute="address" id="1646952949946" synchronous="true"/> </sectioncol> <sectioncol id="1647042932193"> <textbox dataattribute="media" id="1646952449720" lookup="valuelist"/> <textbox dataattribute="siteid" id="1647042395724" lookup="site"/> <textbox dataattribute="port" id="1646952974151"/> </sectioncol> <sectioncol id="1646952210609"> <checkbox dataattribute="default" id="1647042973885" synchronous="true"/> </sectioncol> </sectionrow> </section> </tabledetails> <buttongroup id="1646953032200"> <pushbutton default="true" id="1646953038034" label="New Row" mxevent="addrow"/> </buttongroup> </table> <buttongroup id="1646951892506"> <pushbutton default="true" id="1646951898172" label="OK" mxevent="dialogok"/> <pushbutton id="1646955899014" label="Cancel" mxevent="dialogcancel"/> </buttongroup> </dialog><dialog beanclass="psdi.webclient.system.beans.QbeBean" id="searchmore" inputmode="query" label="More Search Fields"> <section id="searchmore_1"> <textbox dataattribute="LABEL" id="searchmore_attr1"/> <textbox dataattribute="DESCRIPTION" id="searchmore_attr2"/> <textbox dataattribute="MEDIA" id="searchmore_attr4" lookup="valuelist"/> </section> <buttongroup id="searchmore_buttongroup"> <pushbutton default="true" id="searchmore_buttongroup_1" label="Find" mxevent="dialogok"/> <pushbutton id="qbe_restoreappdefault_button" label="Restore Application Defaults" mxevent="qbeclear"/> <pushbutton id="qbe_revisebutton" label="Revise" menutype="SEARCHMOREREVISE" targetid="searchmore"/> <pushbutton id="searchmore_buttongroup_3" label="Cancel" mxevent="qbecancel"/> </buttongroup> </dialog><dialog beanclass="psdi.webclient.system.beans.ViewBookmarksBean" id="searchbook" label="My Bookmarks" mboname="STLABEL"> <table id="bookmarks_table" inputmode="readonly" selectmode="single"> <tablebody displayrowsperpage="20" filterable="true" id="bookmarks_table_tablebody"> <tablecol dataattribute="LABEL" id="bookmarks_tablecolumn_1" mxevent="selectrecord" type="link"/> <tablecol dataattribute="description" id="bookmarks_tablecolumn_2"/> <tablecol filterable="false" id="bookmarks_tablecolumn_3" mxevent="instantdelete" mxevent_desc="Delete" mxevent_icon="btn_delete.gif" sortable="false" type="event"/> </tablebody> </table> <buttongroup id="bookmarks_2"> <pushbutton default="true" id="bookmarks_2_1" label="OK" mxevent="dialogok"/> </buttongroup> </dialog> <configurationblock id="datastore_configurationblock"> </configurationblock> </presentation>', nextval for maxpresentationseq);
                 ]]>
             </sql>
         </freeform>
 
-        <freeform description="Message Prefrix">
+        <!-- Create the prefix for the STXAB messages, which are reserved for the label applciation -->
+        <freeform description="Add STXAB Message Prefrix and delete any messages in that name space.">
             <sql>
                 insert into maxdataprefix(prefix, product,maxdataprefixid) select 'STXAB', 'Addon Sharptree Products', maxdataprefixseq.nextval from dummy_table where not exists (select 1 from maxdataprefix where prefix = 'STXAB');
+                delete maxmessages where where msgid like 'STXAB%'
             </sql>
         </freeform>
 
+        <!-- Create a navigation menu item that is a sub menu of the System Configuration > Platform Configuration -->
+        <freeform description="Create system navigation menu entry.">
+            <sql>
+                INSERT INTO MAXMENU (MENUTYPE, MODULEAPP, POSITION, SUBPOSITION, ELEMENTTYPE,KEYVALUE, MAXMENUID, VISIBLE) SELECT 'MODULE', 'UTIL', (SELECT POSITION FROM maxmenu WHERE MENUTYPE ='MODULE' AND ELEMENTTYPE = 'APP' AND KEYVALUE  = 'CONFIGUR'), (SELECT max(subposition) + 1 FROM MAXMENU m WHERE MENUTYPE = 'MODULE' AND MODULEAPP ='UTIL'), 'APP', 'STLABEL', MAXMENUSEQ.NEXTVAL, 1 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM MAXMENU WHERE KEYVALUE = 'STLABEL');
+            </sql>
+        </freeform>
+
+        <!-- Create the integration object for STAUTOSCRIPT-->
+        <freeform description="Create STAUTOSCRIPT if it does not exist">
+            <sql>
+                insert into maxintobject (intobjectname, description, selfreferencing, userdefined, changeby, changedate, maxintobjectid, langcode, hasld, queryonly, configurable, flatsupported, usewith, aliasconflict, authapp)
+                select 'STAUTOSCRIPT', 'Sharptree Automation Script', 0, 1, 'MAXADMIN', sysdate, maxintobjectseq.nextval, 'EN', 0, 0, 1, 0, 'INTEGRATION', 0, 'STAUTOSCRIPT' from dummy_table where not exists (select 1 from maxintobject where intobjectname = 'STAUTOSCRIPT') ;
+
+                insert into maxintobjdetail (intobjectname, objectname, objectorder, processorder, userdefined, changeby, changedate, maxintobjdetailid, objectid, hierarchypath)
+                select 'STAUTOSCRIPT', 'AUTOSCRIPT', 1, 1, 1, 'MAXADMIN', sysdate, maxintobjdetailseq.nextval, 1, 'AUTOSCRIPT' from dummy_table where not exists (select 1 from maxintobjdetail where intobjectname = 'STAUTOSCRIPT' and objectname = 'AUTOSCRIPT') ;
+
+                insert into maxintobjdetail (intobjectname, objectname, objectorder, processorder, userdefined, changeby, changedate, maxintobjdetailid, objectid, hierarchypath, parentobjid, relation)
+                select 'STAUTOSCRIPT', 'AUTOSCRIPTVARS', 1, 1, 1, 'MAXADMIN', sysdate, maxintobjdetailseq.nextval, 2, 'AUTOSCRIPT/AUTOSCRIPTVARS', 1,'AUTOSCRIPTVARS' from dummy_table where not exists (select 1 from maxintobjdetail where intobjectname = 'STAUTOSCRIPT' and objectname = 'AUTOSCRIPTVARS') ;
+
+                insert into maxintobjdetail (intobjectname, objectname, objectorder, processorder, userdefined, changeby, changedate, maxintobjdetailid, objectid, hierarchypath, parentobjid, relation)
+                select 'STAUTOSCRIPT', 'AUTOSCRIPTVARS', 2, 1, 1, 'MAXADMIN', sysdate, maxintobjdetailseq.nextval, 3, 'AUTOSCRIPT/SCRIPTLAUNCHPOINT', 1,'SCRIPTLAUNCHPOINT' from dummy_table where not exists (select 1 from maxintobjdetail where intobjectname = 'STAUTOSCRIPT' and objectname = 'SCRIPTLAUNCHPOINT') ;
+
+                insert into maxintobjdetail (intobjectname, objectname, objectorder, processorder, userdefined, changeby, changedate, maxintobjdetailid, objectid, hierarchypath, parentobjid, relation)
+                select 'STAUTOSCRIPT', 'LAUNCHPOINTVARS', 3, 1, 1, 'MAXADMIN', sysdate, maxintobjdetailseq.nextval, 4, 'AUTOSCRIPT/SCRIPTLAUNCHPOINT/LAUNCHPOINTVARS', 3,'LAUNCHPOINTVARS' from dummy_table where not exists (select 1 from maxintobjdetail where intobjectname = 'STAUTOSCRIPT' and objectname = 'LAUNCHPOINTVARS') ;
+
+                INSERT INTO MAXAPPS (APP, DESCRIPTION, APPTYPE, MAXAPPSID, LOCKENABLED, HASLD, LANGCODE)
+                SELECT 'STAUTOSCRIPT', 'Sharptree Automation Script', 'OS', MAXAPPSSEQ.NEXTVAL, 0, 0, 'EN' FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM MAXAPPS WHERE APP = 'STAUTOSCRIPT');
+
+                INSERT INTO SIGOPTION (APP, OPTIONNAME, DESCRIPTION, ESIGENABLED, VISIBLE, ALSOREVOKES, PREREQUISITE, SIGOPTIONID, LANGCODE, HASLD)
+                SELECT 'STAUTOSCRIPT', 'BMXVIEWMANAGEWHER', 'Sigoption to control the visibility of SQL clause in apimeta and querymeta.', 0, 1, NULL, 'READ', SIGOPTIONSEQ.NEXTVAL, 'EN', 0 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT' AND OPTIONNAME = 'BMXVIEWMANAGEWHER');
+
+                INSERT INTO SIGOPTION (APP, OPTIONNAME, DESCRIPTION, ESIGENABLED, VISIBLE, ALSOREVOKES, PREREQUISITE, SIGOPTIONID, LANGCODE, HASLD)
+                SELECT 'STAUTOSCRIPT', 'DELETE', 'Delete STAUTOSCRIPT', 0, 1, NULL, 'SAVE', SIGOPTIONSEQ.NEXTVAL, 'EN', 0 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT' AND OPTIONNAME = 'DELETE');
+
+                INSERT INTO SIGOPTION (APP, OPTIONNAME, DESCRIPTION, ESIGENABLED, VISIBLE, ALSOREVOKES, PREREQUISITE, SIGOPTIONID, LANGCODE, HASLD)
+                SELECT 'STAUTOSCRIPT', 'INSERT', 'Insert STAUTOSCRIPT', 0, 1, NULL, 'SAVE', SIGOPTIONSEQ.NEXTVAL, 'EN', 0 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT' AND OPTIONNAME = 'INSERT');
+
+                INSERT INTO SIGOPTION (APP, OPTIONNAME, DESCRIPTION, ESIGENABLED, VISIBLE, ALSOREVOKES, PREREQUISITE, SIGOPTIONID, LANGCODE, HASLD)
+                SELECT 'STAUTOSCRIPT', 'READ', 'Read STAUTOSCRIPT', 0, 1, 'ALL', NULL, SIGOPTIONSEQ.NEXTVAL, 'EN', 0 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT' AND OPTIONNAME = 'READ');
+
+                INSERT INTO SIGOPTION (APP, OPTIONNAME, DESCRIPTION, ESIGENABLED, VISIBLE, ALSOREVOKES, PREREQUISITE, SIGOPTIONID, LANGCODE, HASLD)
+                SELECT 'STAUTOSCRIPT', 'SAVE', 'Save STAUTOSCRIPT', 0, 1, 'DELETE,INSERT', NULL, SIGOPTIONSEQ.NEXTVAL, 'EN', 0 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT' AND OPTIONNAME = 'SAVE');
+
+                INSERT INTO SIGOPTION (APP, OPTIONNAME, DESCRIPTION, ESIGENABLED, VISIBLE, ALSOREVOKES, PREREQUISITE, SIGOPTIONID, LANGCODE, HASLD)
+                SELECT 'STAUTOSCRIPT', 'PRINTLABEL', 'Print Label', 0, 1, NULL , NULL, SIGOPTIONSEQ.NEXTVAL, 'EN', 0 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT' AND OPTIONNAME = 'PRINTLABEL');
+            </sql>
+        </freeform>
+
+        <add_sigoption app="STLABEL" optionname="BMXVIEWMANAGEWHER" description="Sigoption to control the visibility of the Detail section in View/Manage Queries dialog" />
+        <add_sigoption app="STLABEL" optionname="BMXVIEWMANAGEWHERRO" description="Sigoption to control the editability of the Clause field in View/Manage Queries dialog" />
+        <add_sigoption app="STLABEL" optionname="BOOKMARK" description="Add to Bookmarks" visible="false"/>
+        <add_sigoption app="STLABEL" optionname="CLEAR" description="Clear Changes" visible="false"/>
+        <add_sigoption app="STLABEL" optionname="DELETE" description="Delete Label" prerequisite="SAVE" />
+        <add_sigoption app="STLABEL" optionname="DUPLICATE" description="Duplicate Label" prerequisite="INSERT" />
+        <add_sigoption app="STLABEL" optionname="INSERT" description="New Label" alsogrants="SAVE" alsorevokes="DUPLICATE" />
+        <add_sigoption app="STLABEL" optionname="NEXT" description="Next Label" visible="false"/>
+        <add_sigoption app="STLABEL" optionname="PREVIOUS" description="Previous Label" visible="false"/>
+        <add_sigoption app="STLABEL" optionname="PRINTERS" description="Manage Printers" />
+        <add_sigoption app="STLABEL" optionname="READ" description="Read Access to Labels" alsogrants="CLEAR,BOOKMARK,NEXT,PREVIOUS" alsorevokes="ALL" />
+        <add_sigoption app="STLABEL" optionname="SAVE" description="Save Label" alsorevokes="INSERT,DUPLICATE, DELETE"/>
+        <add_sigoption app="STLABEL" optionname="SEARCHBOOK" description="Bookmarks" />
+        <add_sigoption app="STLABEL" optionname="SEARCHMORE" description="More Search Fields" />
+        <add_sigoption app="STLABEL" optionname="SEARCHSQRY" description="Save Current Query" />
+        <add_sigoption app="STLABEL" optionname="SEARCHTIPS" description="View Search Tips" />
+        <add_sigoption app="STLABEL" optionname="SEARCHVMQR" description="View/Manage Queries" />
+        <add_sigoption app="STLABEL" optionname="SEARCHWHER" description="Where Clause" />
+
+        <!-- Grant the Maximo administration access to the Label Configuration application.-->
+        <freeform description="Grant the Maximo adminstation group access to the Label Configuration applciation">
+            <sql>
+                INSERT INTO APPLICATIONAUTH (GROUPNAME, APP, OPTIONNAME, APPLICATIONAUTHID) SELECT (SELECT VARVALUE FROM MAXVARS m WHERE VARNAME = 'ADMINGROUP'), 'STLABEL', OPTIONNAME , APPLICATIONAUTHSEQ.NEXTVAL FROM SIGOPTION WHERE APP = 'STLABEL';
+            </sql>
+        </freeform>
     </statements>
 </script>

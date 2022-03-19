@@ -39,9 +39,12 @@ public class V1000_01 extends AutoUpgradeTemplate {
 
     @Override
     protected void process() throws Exception {
-        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.PRINTERS","psdi/barcodeprint/en/stautoscript.printers.js","Sharptree Barcode Printers", "1.0.0", dbIn);
-        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.PRINTINVLABEL","psdi/barcodeprint/en/stautoscript.printerinvlabel.js","Sharptree Print Barcode Inventory Label", "1.0.0", dbIn);
-        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.PRINTERLABEL","psdi/barcodeprint/en/stautoscript.printerlabel.js","Sharptree Barcode Label", "1.0.0", dbIn);
+        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.ZEBRALABEL.LABELCFG","psdi/barcodeprint/en/resources/stautoscript.zebralabel.labelcfg.js","Barcode Label Configurations", "1.0.0", dbIn);
+        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.ZEBRALABEL.LABELS","psdi/barcodeprint/en/resources/stautoscript.zebralabel.labels.js","Barcode Label Definitions", "1.0.0", dbIn);
+        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.ZEBRALABEL.PRINTERCFG","psdi/barcodeprint/en/resources/stautoscript.zebralabel.printercfg.js","Barcode Printer Configurations", "1.0.0", dbIn);
+        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.ZEBRALABEL.PRINTERS","psdi/barcodeprint/en/resources/stautoscript.zebralabel.printers.js","Barcode Printers", "1.0.0", dbIn);
+        AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL","psdi/barcodeprint/en/resources/stautoscript.zebralabel.printlabel.js","Print a Barcode Label", "1.0.0", dbIn);
+
         super.process();
     }
 }
