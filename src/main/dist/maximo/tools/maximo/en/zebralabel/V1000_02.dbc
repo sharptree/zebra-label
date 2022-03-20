@@ -53,6 +53,8 @@
             <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer where the label will be printed." classname="io.sharptree.maximo.app.label.virtual.FldPrinter" sameasobject="STPRINTER" sameasattribute="STPRINTER"/>
             <attrdef attribute="SITEID" title="Site" remarks="The site identifier." classname="psdi.app.site.FldSiteID" sameasobject="SITE" sameasattribute="SITEID" />
         </define_table>
+        
+        <create_relationship parent="STPRINTER" name="LOCATIONS" child="LOCATIONS" whereclause="location=:location and siteid=:siteid" remarks="Relationship to LOCATIONS table."/>
 
         <!-- Add the application properties -->
         <add_property name="sharptree.zebralabel.maxcount" description="Maximum number of label copies to print." maxtype="INTEGER" secure_level="public" />
