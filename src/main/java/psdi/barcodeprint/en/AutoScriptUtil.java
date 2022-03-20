@@ -13,8 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * Utility class that adds or updates an automation script to Maximo from the UpdateDB / DBC process.
+ */
 public abstract class AutoScriptUtil {
 
+    @SuppressWarnings("unused")
     public static void createOrUpdateObjectLaunchPoint(Connection connection, String scriptName, String launchPointName, String description, String objectName, int objectEvent, int dbIn) throws Exception {
         if (connection == null) {
             throw new Exception("The connection parameter is required and cannot be null");
@@ -205,13 +209,11 @@ public abstract class AutoScriptUtil {
                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         }
 
-        ResultSet resultSet = null;
         try {
-
             autoScriptInsert.setString(1, scriptName);
             autoScriptInsert.setString(2, "Active");
             autoScriptInsert.setString(3, description);
-            autoScriptInsert.setString(4, source.toString());
+            autoScriptInsert.setString(4, source);
             autoScriptInsert.setDate(5, new java.sql.Date(System.currentTimeMillis()));
             autoScriptInsert.setDate(6, new java.sql.Date(System.currentTimeMillis()));
             autoScriptInsert.setDate(7, new java.sql.Date(System.currentTimeMillis()));
@@ -234,18 +236,12 @@ public abstract class AutoScriptUtil {
 
             autoScriptInsert.execute();
 
-
         } finally {
-
-            close(resultSet);
-
             close(autoScriptInsert);
         }
     }
 
     private static long getNextId(Connection connection, String sequenceName, int dbIn, Util util) throws Exception {
-        long nextId = -1;
-
         if (dbIn == UpgConstants.SQLSERVER) {
             return Long.parseLong(util.getNextSequenceValueForSqlServer(sequenceName));
         } else {

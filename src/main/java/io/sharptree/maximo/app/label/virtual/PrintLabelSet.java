@@ -9,6 +9,11 @@ import psdi.util.logging.FixedLoggers;
 
 import java.rmi.RemoteException;
 
+/**
+ * Non-persistent MboSet for managing printing a label.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class PrintLabelSet extends NonPersistentMboSet {
 
@@ -40,35 +45,25 @@ public class PrintLabelSet extends NonPersistentMboSet {
     public void execute() throws MXException, RemoteException {
         MboRemote printLabel = getMbo(0);
 
-        if(printLabel.getInt("COUNT")<1){
-            throw new MXApplicationException("sharptree","countLessThanOne");
+        if (printLabel.getInt("COUNT") < 1) {
+            throw new MXApplicationException("sharptree", "countLessThanOne");
         }
 
         int maxCount = 10;
 
         try {
             Integer.parseInt(MXServer.getMXServer().getProperty("sharptree.zebralabel.maxcount"));
-        }catch(Throwable t){
+        } catch (Throwable t) {
             FixedLoggers.APPLOGGER.error("Error parsing property sharptree.zebralabel.maxcount: " + t.getMessage());
         }
 
-        if(printLabel.getInt("COUNT")> maxCount){
+        if (printLabel.getInt("COUNT") > maxCount) {
             throw new MXApplicationException("sharptree", "countGreaterThanMax", new String[]{printLabel.getString("COUNT"), String.valueOf(maxCount)});
         }
 
-        try {
-            for (int i = 0; i < printLabel.getInt("COUNT"); i++) {
-                (new ScriptAction()).applyCustomAction(printLabel, new String[]{"STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL"});
-            }
-        } catch (Exception e) {
-            if (e instanceof MXException) {
-                throw (MXException) e;
-            } else if (e.getCause() instanceof MXException) {
-                throw (MXException) e;
-            }
-            //TODO handle errors.
-            e.printStackTrace();
-
+        for (int i = 0; i < printLabel.getInt("COUNT"); i++) {
+            // invoking the script should only throw MXExceptions which can be handled by the application framework.
+            (new ScriptAction()).applyCustomAction(printLabel, new String[]{"STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL"});
         }
 
         // reset the MboSet so related sets such as the temporary domain used for the combo boxes isn't saved.

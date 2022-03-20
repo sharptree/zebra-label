@@ -1,25 +1,38 @@
 package io.sharptree.maximo.app.label;
 
-import psdi.mbo.MAXTableDomain;
-import psdi.mbo.MboConstants;
-import psdi.mbo.MboRemote;
-import psdi.mbo.MboValue;
+import psdi.mbo.*;
 import psdi.util.MXException;
 import psdi.util.logging.FixedLoggers;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that provides a list of valid storeroom locations.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class FldLocation extends MAXTableDomain {
+
+    /**
+     * Create a new FldLocation instance.
+     *
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldLocation(MboValue mbv) {
         super(mbv);
         String thisAttr = this.getMboValue().getAttributeName();
 
         setRelationship("LOCATIONS","location=:location and siteid = :siteid and type = 'STOREROOM'");
-        setListCriteria("type = 'STOREROOM' and siteid = :siteid and orgid = :orgid");
+        setListCriteria("type = 'STOREROOM' and siteid = :siteid");
         this.setErrorMessage("sharptree", "invalidStoreroom");
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MAXTableDomain#setValueFromLookup(MboRemote)
+     */
     @Override
     public void setValueFromLookup(MboRemote sourceMbo) throws MXException, RemoteException {
         if(sourceMbo!=null && sourceMbo.isBasedOn("LOCATIONS")){

@@ -1,9 +1,6 @@
 package io.sharptree.maximo.app.label;
 
-import psdi.mbo.Mbo;
-import psdi.mbo.MboConstants;
-import psdi.mbo.MboRemote;
-import psdi.mbo.MboSet;
+import psdi.mbo.*;
 import psdi.util.MXException;
 
 import java.rmi.RemoteException;
@@ -14,6 +11,7 @@ import java.rmi.RemoteException;
  * @author Jason VenHuizen
  */
 public class Label extends Mbo {
+
     /**
      * Creates a new instance of BarcodePrint.
      *
@@ -24,6 +22,11 @@ public class Label extends Mbo {
         super(ms);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see Mbo#init()
+     */
     @Override
     public void init() throws MXException {
         setFieldFlag(new String[]{"LABEL", "MEDIA", "ZPL", "USEWITH"}, MboConstants.REQUIRED, true);
@@ -31,6 +34,11 @@ public class Label extends Mbo {
         super.init();
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see Mbo#duplicate()
+     */
     @Override
     public MboRemote duplicate() throws MXException, RemoteException {
         MboRemote newLabel = this.copy();

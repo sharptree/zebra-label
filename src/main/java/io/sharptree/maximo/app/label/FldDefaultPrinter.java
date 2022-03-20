@@ -9,12 +9,29 @@ import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that validates that there isn't another default printer for the same location and media type.
+ * If there is, the user is prompted if they way to uncheck the other printer as the default.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class FldDefaultPrinter extends MboValueAdapter {
+
+    /**
+     * Create a new FldDefaultPrinter instance.
+     *
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldDefaultPrinter(MboValue mbv) {
         super(mbv);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#validate()
+     */
     @Override
     public void validate() throws MXException, RemoteException {
 
@@ -27,7 +44,7 @@ public class FldDefaultPrinter extends MboValueAdapter {
                         printerSet.getMbo(0).setValue("DEFAULT", false);
                         break;
                     case MXApplicationYesNoCancelException.NULL:
-                        throw new MXApplicationYesNoCancelException("changedefaultprinter", "sharptree", "changedefault");
+                        throw new MXApplicationYesNoCancelException("changedefaultprinter", "sharptree", "changeDefaultPrinter",new String[]{getMboValue("LOCATION").getString()});
                     default:
                         getMboValue().setValue(false);
                 }

@@ -7,12 +7,28 @@ import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that validates that the entered value is between 0 and 65535.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class FldPort extends MboValueAdapter {
+
+    /**
+     * Create a new FldPort instance.
+     *
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldPort(MboValue mbv) {
         super(mbv);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#validate()
+     */
     @Override
     public void validate() throws MXException, RemoteException {
         if (!getMboValue().isNull()) {

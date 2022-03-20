@@ -3,6 +3,7 @@ package io.sharptree.maximo.app.label;
 import psdi.mbo.Mbo;
 import psdi.mbo.MboConstants;
 import psdi.mbo.MboSet;
+import psdi.mbo.MboValueAdapter;
 import psdi.util.MXException;
 import psdi.util.logging.FixedLoggers;
 
@@ -24,6 +25,11 @@ public class Printer extends Mbo {
         super(ms);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see Mbo#init()
+     */
     @Override
     public void init() throws MXException {
         super.init();

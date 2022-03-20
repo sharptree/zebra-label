@@ -93,4 +93,15 @@
         <AdminResponse></AdminResponse>
         <OperatorResponse></OperatorResponse>
     </Message>
+    <Message id="STXAB0010I" group="sharptree" key="changeDefaultPrinter" prefix="1">
+        <Display method="MSGBOX">
+            <Option>MSG_BTNYES</Option>
+            <Option>MSG_BTNNO</Option>
+            <Option>MSG_BTNCANCEL</Option>
+        </Display>
+        <MsgText>Another printer is already declared as the default for the {0} store, do you want to change the default printer?</MsgText>
+        <Explanation></Explanation>
+        <AdminResponse></AdminResponse>
+        <OperatorResponse></OperatorResponse>
+    </Message>
 </messages>

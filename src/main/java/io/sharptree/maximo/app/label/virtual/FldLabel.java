@@ -6,12 +6,27 @@ import psdi.util.logging.FixedLoggers;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that dynamically generates a value list for the Label combo box on the Print Label dialog.
+ *
+ * @author Jason VenHuizen
+ */
 public class FldLabel extends MboValueAdapter {
 
+    /**
+     * Create a new FldLabel instance.
+     *
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldLabel(MboValue mbv) {
         super(mbv);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#getList()
+     */
     @Override
     public MboSetRemote getList() throws MXException, RemoteException {
         MboSetRemote domainSet = getMboValue().getMbo().getMboSet("$tmpmaxdomain", "MAXDOMAIN", "1=0");
@@ -55,6 +70,11 @@ public class FldLabel extends MboValueAdapter {
         }
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#hasList()
+     */
     @Override
     public boolean hasList() {
         return true;

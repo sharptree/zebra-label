@@ -10,12 +10,29 @@ import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that validates that there isn't another default label for the same  media type.
+ * If there is, the user is prompted if they way to uncheck the other label as the default.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class FldDefaultLabel extends MboValueAdapter {
+
+    /**
+     * Create a new FldDefaultLabel instance.
+     *
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldDefaultLabel(MboValue mbv) {
         super(mbv);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#validate()
+     */
     @Override
     public void validate() throws MXException, RemoteException {
         if(getMboValue().getBoolean()) {

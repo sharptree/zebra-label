@@ -15,6 +15,11 @@ import java.rmi.RemoteException;
  */
 public class PrintLabel extends NonPersistentMbo {
 
+    /**
+     * Create a new instance of the PrintLabel Mbo.
+     * @param ms the owning MboSet.
+     * @throws RemoteException thrown if a remote network error occurs.
+     */
     public PrintLabel(MboSet ms) throws RemoteException {
         super(ms);
     }
@@ -26,7 +31,6 @@ public class PrintLabel extends NonPersistentMbo {
      */
     public void init() throws MXException {
         super.init();
-
         setFieldFlag(new String[]{"PRINTER", "LABEL", "COUNT"}, REQUIRED, true);
     }
 
@@ -68,8 +72,6 @@ public class PrintLabel extends NonPersistentMbo {
                 }
             }
         }
-
         super.add();
     }
-
 }

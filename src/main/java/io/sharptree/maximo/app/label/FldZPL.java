@@ -1,7 +1,6 @@
 package io.sharptree.maximo.app.label;
 
-import com.google.common.net.InetAddresses;
-import com.google.common.net.InternetDomainName;
+import psdi.mbo.Mbo;
 import psdi.mbo.MboValue;
 import psdi.mbo.MboValueAdapter;
 import psdi.util.MXApplicationException;
@@ -9,12 +8,29 @@ import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that validates that a minimum the ZPL starts and ends with the required ^XA and ^XZ commands.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class FldZPL extends MboValueAdapter {
+
+    /**
+     * Create a new FldZPL instance.
+     *
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldZPL(MboValue mbv) {
         super(mbv);
     }
 
+
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#validate()
+     */
     @Override
     public void validate() throws MXException, RemoteException {
         if (!getMboValue().isNull()) {

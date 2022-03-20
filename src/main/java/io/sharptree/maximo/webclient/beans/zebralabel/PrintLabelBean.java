@@ -8,6 +8,11 @@ import psdi.webclient.system.beans.DataBean;
 
 import java.rmi.RemoteException;
 
+/**
+ * Bean that handles only displaying the print label dialog if more than one printer / label combination is available.
+ *
+ * @author Jason VenHuizen
+ */
 @SuppressWarnings("unused")
 public class PrintLabelBean extends DataBean {
     @Override

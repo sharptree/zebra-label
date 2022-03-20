@@ -1,18 +1,30 @@
 package io.sharptree.maximo.app.label.virtual;
 
-import psdi.mbo.MboRemote;
-import psdi.mbo.MboSetRemote;
-import psdi.mbo.MboValue;
-import psdi.mbo.MboValueAdapter;
+import psdi.mbo.*;
 import psdi.util.MXException;
 
 import java.rmi.RemoteException;
 
+/**
+ * MboValueAdapter that dynamically generates a value list for the Printer combo box on the Print Label dialog.
+ *
+ * @author Jason VenHuizen
+ */
 public class FldPrinter extends MboValueAdapter {
+
+    /**
+     * Create a new FldPrinter instance.
+     * @param mbv the MboValue that is being wrapped by the adapter.
+     */
     public FldPrinter(MboValue mbv) {
         super(mbv);
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#getList()
+     */
     @Override
     public MboSetRemote getList() throws MXException, RemoteException {
 
@@ -45,6 +57,11 @@ public class FldPrinter extends MboValueAdapter {
         return alnSet;
     }
 
+    /**
+     * {@inerhitDoc}
+     *
+     * @see MboValueAdapter#hasList()
+     */
     @Override
     public boolean hasList() {
         return true;
