@@ -29,13 +29,13 @@
             <attrdef attribute="DESCRIPTION" title="Description" remarks="The description for the label." maxtype="ALN" length="50" searchtype="WILDCARD"/>
             <attrdef attribute="ZPL" title="ZPL" remarks="The ZPL for the label." maxtype="CLOB" classname="io.sharptree.maximo.app.label.FldZPL"/>
             <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" searchtype="WILDCARD" classname="io.sharptree.maximo.app.label.FldMedia"/>
-            <attrdef attribute="DEFAULT" title="Default" remarks="Is the default label for the media type?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultLabel"/>
+            <attrdef attribute="DEFAULT" title="Default" remarks="Is the default label for the media type?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultLabel" defaultvalue="0" required="true"/>
             <attrdef attribute="USEWITH" title="Use With" remarks="The Maximo object name that the label can be used with." sameasobject="MAXOBJECT" sameasattribute="OBJECTNAME" searchtype="WILDCARD" domain="LABELUSEWITH" defaultvalue="INVBALANCES"/>
         </define_table>
 
         <define_table object="STPRINTER" description="Sharptree Label Printers" service="STLABEL" classname="io.sharptree.maximo.app.label.PrinterSet" type="system"  primarykey="PRINTER">
             <attrdef attribute="ADDRESS" title="Address" remarks="Host name or IP address of the printer." maxtype="ALN" length="50" classname="io.sharptree.maximo.app.label.FldAddress" searchtype="WILDCARD"/>
-            <attrdef attribute="DEFAULT" title="Default" remarks="Default printer for the specified location?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultPrinter"/>
+            <attrdef attribute="DEFAULT" title="Default" remarks="Default printer for the specified location?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultPrinter" defaultvalue="0" required="true"/>
             <attrdef attribute="DESCRIPTION" title="Description" remarks="The description of the printer." maxtype="ALN" length="50"/>
             <attrdef attribute="LOCATION" title="Storeroom" remarks="The storeroom where the printer is located." sameasobject="LOCATIONS" sameasattribute="LOCATION" searchtype="WILDCARD" classname="io.sharptree.maximo.app.label.FldLocation"/>
             <attrdef attribute="MEDIA" title="Media" remarks="The size of the label" domain="LABELMEDIA" maxtype="ALN" length="10" />
@@ -59,6 +59,7 @@
 
         <create_relationship parent="INVBALANCES" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
         <create_relationship parent="MATRECTRANS" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
+        <create_relationship parent="INVENTORY" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
 
 
 

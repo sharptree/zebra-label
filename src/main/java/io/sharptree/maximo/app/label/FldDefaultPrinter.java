@@ -35,7 +35,7 @@ public class FldDefaultPrinter extends MboValueAdapter {
     @Override
     public void validate() throws MXException, RemoteException {
 
-        MboSetRemote printerSet = getMboValue().getMbo().getMboSet("$printercheck", "STPRINTER", "location = :location and siteid = :siteid  and default = :yes");
+        MboSetRemote printerSet = getMboValue().getMbo().getMboSet("$printercheck", "STPRINTER", "printer!=:printer and location = :location and siteid = :siteid  and default = :yes");
         if (!printerSet.isEmpty()) {
             if (getMboValue().getMbo().getUserInfo().isInteractive()) {
                 int userInput = MXApplicationYesNoCancelException.getUserInput("changedefaultprinter", MXServer.getMXServer(), getMboValue().getMbo().getUserInfo());

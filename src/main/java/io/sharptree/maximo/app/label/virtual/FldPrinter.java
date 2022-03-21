@@ -1,6 +1,9 @@
 package io.sharptree.maximo.app.label.virtual;
 
-import psdi.mbo.*;
+import psdi.mbo.MboRemote;
+import psdi.mbo.MboSetRemote;
+import psdi.mbo.MboValue;
+import psdi.mbo.MboValueAdapter;
 import psdi.util.MXException;
 
 import java.rmi.RemoteException;
@@ -14,6 +17,7 @@ public class FldPrinter extends MboValueAdapter {
 
     /**
      * Create a new FldPrinter instance.
+     *
      * @param mbv the MboValue that is being wrapped by the adapter.
      */
     public FldPrinter(MboValue mbv) {
@@ -55,6 +59,29 @@ public class FldPrinter extends MboValueAdapter {
         }
 
         return alnSet;
+    }
+
+    @Override
+    public void action() throws MXException, RemoteException {
+        MboSetRemote labelList = getMboValue("LABEL").getList();
+        if (labelList != null && labelList.count() == 1) {
+            getMboValue("LABEL").setValue(labelList.getMbo(0).getString("VALUE"));
+        } else {
+            boolean foundDefault = false;
+            MboRemote label = labelList.moveFirst();
+            while (label != null) {
+                if (label.getBoolean("DEFAULT")) {
+                    foundDefault = true;
+                    getMboValue("LABEL").setValue(label.getString("VALUE"));
+                    break;
+                }
+                label = labelList.moveNext();
+            }
+
+            if (!foundDefault) {
+                getMboValue("LABEL").setValueNull();
+            }
+        }
     }
 
     /**
