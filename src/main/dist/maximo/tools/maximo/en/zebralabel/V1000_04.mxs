@@ -2,10 +2,10 @@
 <updatescript version="7.1.0.0">
 	<systemlib apptype="webclient" id="library">
 		<add container="library" control="dialog">
-			<set property="beanclass" value="io.sharptree.maximo.webclient.beans.zebralabel.printlabelbean"/>
+			<set property="beanclass" value="io.sharptree.maximo.webclient.beans.zebralabel.PrintLabelBean"/>
 			<set property="id" value="zebralabelprint"/>
 			<set property="label" value="Print Label"/>
-			<set property="relationship" value="printlabel"/>
+			<set property="relationship" value="PRINTLABEL"/>
 		</add>
 		<add container="zebralabelprint" control="helpgrid">
 			<set property="id" value="1647385368852"/>

@@ -52,7 +52,10 @@ public class PrintLabelSet extends NonPersistentMboSet {
         int maxCount = 10;
 
         try {
-            Integer.parseInt(MXServer.getMXServer().getProperty("sharptree.zebralabel.maxcount"));
+            String max = MXServer.getMXServer().getProperty("sharptree.zebralabel.maxcount");
+            if(max!=null && !max.isEmpty()){
+                Integer.parseInt(MXServer.getMXServer().getProperty("sharptree.zebralabel.maxcount"));
+            }
         } catch (Throwable t) {
             FixedLoggers.APPLOGGER.error("Error parsing property sharptree.zebralabel.maxcount: " + t.getMessage());
         }
@@ -63,7 +66,11 @@ public class PrintLabelSet extends NonPersistentMboSet {
 
         for (int i = 0; i < printLabel.getInt("COUNT"); i++) {
             // invoking the script should only throw MXExceptions which can be handled by the application framework.
-            (new ScriptAction()).applyCustomAction(printLabel, new String[]{"STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL"});
+            try {
+                (new ScriptAction()).applyCustomAction(printLabel, new String[]{"STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL"});
+            }catch(Throwable e){
+                e.printStackTrace();
+            }
         }
 
         // reset the MboSet so related sets such as the temporary domain used for the combo boxes isn't saved.

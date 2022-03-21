@@ -37,12 +37,7 @@ distributions {
         extendsFrom(configurations.implementation.get())
         isCanBeResolved = true
     }
-//
-//    val distributionRuntime by configurations.creating {
-//        extendsFrom(configurations.runtimeOnly.get())
-//        isCanBeResolved = true
-//    }
-
+    
     main {
         distributionBaseName.set(distro.toLowerCase())
         contents {
@@ -59,7 +54,7 @@ distributions {
             into("maximo/tools/maximo/classes") {
                 includeEmptyDirs = false
                 from(layout.buildDirectory.dir("classes/java/main")) {
-                    include("psdi/barcode-print/en/*.class")
+                    include("psdi/zebralabel/en/*.class")
                 }
             }
         }

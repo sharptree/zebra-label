@@ -44,23 +44,28 @@
             <attrdef attribute="SITEID" title="Site" remarks="The location site Id" sameasobject="SITE" sameasattribute="SITEID" searchtype="WILDCARD" classname="io.sharptree.maximo.app.label.FldSiteID" />
         </define_table>
 
-        <define_table object="STPRINTLABEL" description="Sharptree non-persistent object for printing labels." service="io.sharptree.maximo.app.label.virtual.PrintLabelSet" classname="STLABEL" type="system" persistent="false">
+        <define_table object="STPRINTLABEL" description="Sharptree non-persistent object for printing labels." classname="io.sharptree.maximo.app.label.virtual.PrintLabelSet" service="STLABEL" type="system" persistent="false">
             <attrdef attribute="COUNT" title="Count" remarks="The number of labels to print." maxtype="INTEGER"/>
             <attrdef attribute="LABEL" title="Label" remarks="The label to print." sameasobject="STLABEL" sameasattribute="LABEL" classname="io.sharptree.maximo.app.label.virtual.FldLabel" />
             <attrdef attribute="LOCATION" title="Location" remarks="Location where the label will be printed." sameasobject="LOCATIONS" sameasattribute="LOCATION" />
             <attrdef attribute="PARENT" title="Parent" remarks="The name of the parent object." sameasobject="MAXOBJECT" sameasattribute="OBJECTNAME"/>
             <attrdef attribute="PARENTID" title="Parent Id" remarks="The unique Id for the parent object." maxtype="BIGINT"/>
-            <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer where the label will be printed." classname="io.sharptree.maximo.app.label.virtual.FldPrinter" sameasobject="STPRINTER" sameasattribute="STPRINTER"/>
+            <attrdef attribute="PRINTER" title="Printer" remarks="The name of the printer where the label will be printed." classname="io.sharptree.maximo.app.label.virtual.FldPrinter" sameasobject="STPRINTER" sameasattribute="PRINTER"/>
             <attrdef attribute="SITEID" title="Site" remarks="The site identifier." classname="psdi.app.site.FldSiteID" sameasobject="SITE" sameasattribute="SITEID" />
         </define_table>
         
         <create_relationship parent="STPRINTER" name="LOCATIONS" child="LOCATIONS" whereclause="location=:location and siteid=:siteid" remarks="Relationship to LOCATIONS table."/>
 
+        <create_relationship parent="INVBALANCES" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
+        <create_relationship parent="MATRECTRANS" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
+
+
+
         <!-- Add the application properties -->
         <add_property name="sharptree.zebralabel.maxcount" description="Maximum number of label copies to print." maxtype="INTEGER" secure_level="public" />
 
         <!-- create application for label configuration. -->
-        <create_app app="STLABEL" description="Label Configuration" maintbname="STLABEL"/>
+        <create_app app="STLABEL" description="Label Configuration" maintbname="STLABEL" />
 
         <!-- Create presentation entry for the Label Configuration application -->
         <freeform description="Label Configuration Presentation Definition">
@@ -71,11 +76,122 @@
             </sql>
         </freeform>
 
+        <insert table="MAXLABELS" ignore_duplicates="true">
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646951802504" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Printers" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646951898172" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="OK" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646952046290" />
+                <columnvalue column="PROPERTY" string="mxevent_desc" />
+                <columnvalue column="VALUE" string="Mark Row for Delete" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646952158525" />
+                <columnvalue column="PROPERTY" string="mxevent_desc" />
+                <columnvalue column="VALUE" string="Show Detail" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646952202075" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Details" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646953038034" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="New Row" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="1646955899014" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Cancel" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="bookmarks_tablecolumn_3" />
+                <columnvalue column="PROPERTY" string="mxevent_desc" />
+                <columnvalue column="VALUE" string="Delete" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="main" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Label" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="printers" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Printers" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="results" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="List" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="results_bookmark" />
+                <columnvalue column="PROPERTY" string="mxevent_desc" />
+                <columnvalue column="VALUE" string="Add to Bookmarks" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="results_showlist" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Labels" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="results_showlist_column_link" />
+                <columnvalue column="PROPERTY" string="mxevent_desc" />
+                <columnvalue column="VALUE" string="Go To %1" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="results_showlist_column_select" />
+                <columnvalue column="PROPERTY" string="mxevent_desc" />
+                <columnvalue column="VALUE" string="Select Row {0}" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="searchmore" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="More Search Fields" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="searchmore_buttongroup_1" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Find" />
+            </insertrow>
+            <insertrow>
+                <columnvalue column="APP" string="STLABEL" />
+                <columnvalue column="ID" string="searchmore_buttongroup_3" />
+                <columnvalue column="PROPERTY" string="label" />
+                <columnvalue column="VALUE" string="Cancel" />
+            </insertrow>
+        </insert>
+
         <!-- Create the prefix for the STXAB messages, which are reserved for the label applciation -->
         <freeform description="Add STXAB Message Prefrix and delete any messages in that name space.">
             <sql>
                 insert into maxdataprefix(prefix, product,maxdataprefixid) select 'STXAB', 'Addon Sharptree Products', maxdataprefixseq.nextval from dummy_table where not exists (select 1 from maxdataprefix where prefix = 'STXAB');
-                delete maxmessages where where msgid like 'STXAB%'
+                delete maxmessages where msgid like 'STXAB%'
             </sql>
         </freeform>
 
@@ -83,6 +199,54 @@
         <freeform description="Create system navigation menu entry.">
             <sql>
                 INSERT INTO MAXMENU (MENUTYPE, MODULEAPP, POSITION, SUBPOSITION, ELEMENTTYPE,KEYVALUE, MAXMENUID, VISIBLE) SELECT 'MODULE', 'UTIL', (SELECT POSITION FROM maxmenu WHERE MENUTYPE ='MODULE' AND ELEMENTTYPE = 'APP' AND KEYVALUE  = 'CONFIGUR'), (SELECT max(subposition) + 1 FROM MAXMENU m WHERE MENUTYPE = 'MODULE' AND MODULEAPP ='UTIL'), 'APP', 'STLABEL', MAXMENUSEQ.NEXTVAL, 1 FROM DUMMY_TABLE WHERE NOT EXISTS (SELECT 1 FROM MAXMENU WHERE KEYVALUE = 'STLABEL');
+            </sql>
+        </freeform>
+
+
+        <create_app_menu app="STLABEL" type="tool">
+            <app_menu_option option="INSERT" tabdisplay="ALL" accesskey="CTRL+ALT+I" image="nav_icon_insert.gif" />
+            <app_menu_option option="SAVE" tabdisplay="MAIN" accesskey="CTRL+ALT+S" image="nav_icon_save.gif" />
+            <app_menu_option option="CLEAR" tabdisplay="MAIN" accesskey="CTRL+ALT+C" image="nav_icon_clear.gif" />
+            <menu_separator />
+            <app_menu_option option="PREVIOUS" tabdisplay="MAIN" accesskey="CTRL+ALT+P" image="nav_icon_previous.gif" />
+            <app_menu_option option="NEXT" tabdisplay="MAIN" accesskey="CTRL+ALT+N" image="nav_icon_next.gif" />
+        </create_app_menu>
+
+        <create_app_menu app="STLABEL" >
+            <menu_separator />
+            <app_menu_option option="PRINTERS" tabdisplay="ALL" />
+        </create_app_menu>
+        
+        <create_app_menu app="STLABEL" type="search">
+             <app_menu_header headerdescription="Advanced Search" image="atb_search.gif" >
+                 <app_menu_option option="SEARCHMORE" tabdisplay="ALL"/>
+                 <app_menu_option option="SEARCHWHER" tabdisplay="ALL"/>
+                 <app_menu_option option="SEARCHTIPS" tabdisplay="ALL"/>
+             </app_menu_header>
+            <app_menu_header headerdescription="Save Query" image="atb_save.gif" >
+                <app_menu_option option="SEARCHSQRY" tabdisplay="ALL"/>
+                <app_menu_option option="SEARCHVMQR" tabdisplay="ALL"/>
+                <app_menu_option option="SEARCHBOOK" tabdisplay="ALL" image="atb_bookmark.gif"/>
+            </app_menu_header>
+        </create_app_menu>
+
+        <freeform description="Add APPMENU entries">
+            <sql>
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPMENU', 'STLABEL', 10, 0, 'OPTION', 'DELETE', null, null, 1, null, null, 'MAIN', maxmenuseq.nextval);
+
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPMENU', 'STLABEL', 20, 0, 'OPTION', 'BOOKMARK', null, null, 1, null, null, 'MAIN', maxmenuseq.nextval);
+
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPMENU', 'STLABEL', 30, 0, 'OPTION', 'DUPLICATE', null, null, 1, null, null, 'MAIN', maxmenuseq.nextval);
+            </sql>
+        </freeform>
+
+        <!-- Make sure that the STLABEL app is custom so it shows up as licensed -->
+        <freeform description="Make the STLABEL application based on CUSTAPP so it shows up licensed.">
+            <sql>
+                update maxapps set originalapp = 'CUSTAPP' where app = 'STLABEL';
             </sql>
         </freeform>
 

@@ -1,4 +1,4 @@
-package psdi.barcodeprint.en;
+package psdi.zebralabel.en;
 
 import psdi.configure.UpgConstants;
 import psdi.configure.Util;
