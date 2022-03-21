@@ -21,6 +21,7 @@
         <specify_aln_domain domainid="LABELUSEWITH" length="30" description="Label Use With Objects" >
             <alnvalueinfo value="INVBALANCES" description="Inventory Balances"/>
             <alnvalueinfo value="MATRECTRANS" description="Material Receipt Transactions"/>
+            <alnvalueinfo value="INVENTORY" description="Inventory"/>
         </specify_aln_domain>
 
         <define_table object="STLABEL" description="Sharptree Label Definition" service="STLABEL" classname="io.sharptree.maximo.app.label.LabelSet" type="system" mainobject="true"  primarykey="label" >

@@ -104,4 +104,13 @@
         <AdminResponse></AdminResponse>
         <OperatorResponse></OperatorResponse>
     </Message>
+    <Message id="STXAB0011E" group="sharptree" key="unknownPrintError" prefix="1">
+        <Display method="MSGBOX">
+            <Option>MSG_BTNOK</Option>
+        </Display>
+        <MsgText>An unexpected printing error has occurred: {0}.</MsgText>
+        <Explanation></Explanation>
+        <AdminResponse></AdminResponse>
+        <OperatorResponse></OperatorResponse>
+    </Message>
 </messages>

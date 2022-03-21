@@ -69,7 +69,11 @@ public class PrintLabelSet extends NonPersistentMboSet {
             try {
                 (new ScriptAction()).applyCustomAction(printLabel, new String[]{"STAUTOSCRIPT.ZEBRALABEL.PRINTLABEL"});
             }catch(Throwable e){
-                e.printStackTrace();
+                if(e instanceof MXException){
+                    throw e;
+                }else{
+                    throw new MXApplicationException("sharptree","unknownPrintError", new String[]{e.getMessage()});
+                }
             }
         }
 

@@ -37,7 +37,7 @@ distributions {
         extendsFrom(configurations.implementation.get())
         isCanBeResolved = true
     }
-    
+
     main {
         distributionBaseName.set(distro.toLowerCase())
         contents {

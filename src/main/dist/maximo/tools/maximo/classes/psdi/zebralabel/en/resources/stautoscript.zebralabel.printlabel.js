@@ -114,7 +114,7 @@ function main() {
             record = _getRecordForObjectAndId(mbo.getString("PARENT"), mbo.getLong("PARENTID"));
         } else {
             var location;
-            if (mbo.isBasedOn("INVBALANCES")) {
+            if (mbo.isBasedOn("INVBALANCES") || mbo.isBasedOn("INVENTORY")) {
                 location = mbo.getString("LOCATION");
             } else if (mbo.isBasedOn("MATRECTRANS")) {
                 location = mbo.getString("TOSTORELOC");
