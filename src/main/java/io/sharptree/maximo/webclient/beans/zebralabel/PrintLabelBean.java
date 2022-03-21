@@ -2,6 +2,7 @@ package io.sharptree.maximo.webclient.beans.zebralabel;
 
 import io.sharptree.maximo.app.label.virtual.PrintLabelSet;
 import psdi.mbo.Mbo;
+import psdi.mbo.MboRemote;
 import psdi.mbo.MboSetRemote;
 import psdi.util.MXException;
 import psdi.webclient.controls.Dialog;
@@ -29,25 +30,30 @@ public class PrintLabelBean extends DataBean {
                     ((Dialog) clientSession.findDialog("zebralabelprint")).dialogcancel();
                 }
 
-                MboSetRemote printerList = printLabel.getMboValue("PRINTER").getList();
-                MboSetRemote labelList = printLabel.getMboValue("LABEL").getList();
+                MboSetRemote printerList = printLabel.getMboSet("$stprinter", "STPRINTER", "location=:location and siteid = :siteid");
 
-                if (printerList != null && printerList.count() == 1 && labelList != null && labelList.count() == 1) {
-                    ((Dialog) clientSession.findDialog("zebralabelprint")).dialogcancel();
+                if (printerList!=null && printerList.count() == 1) {
+                    MboRemote printer = printerList.getMbo(0);
+                    setValue("PRINTER", printer.getString("PRINTER"));
+                    MboSetRemote labelList = printer.getMboSet("$stlabel", "STLABEL", "media=:media and usewith = '" + printLabel.getOwner().getName() + "'");
 
-                    printLabel.setValue("PRINTER", printLabel.getMboValue("PRINTER").getList().getMbo(0).getString("VALUE"));
-                    printLabel.setValue("LABEL", printLabel.getMboValue("LABEL").getList().getMbo(0).getString("VALUE"));
+                    if(labelList.count() == 1){
+                        MboRemote label = labelList.getMbo(0);
 
-                    if (getMboSet().getName().equals("STPRINTLABEL")) {
-                        String[] args = new String[]{getMboSet().getMbo().getOwner().getString("ITEMNUM")};
-                        ((PrintLabelSet) getMboSet()).execute();
-                        clientSession.showMessageBox("sharptree", "labelPrinted", args);
+                        ((Dialog) clientSession.findDialog("zebralabelprint")).dialogcancel();
+
+                        printLabel.setValue("PRINTER", printer.getString("PRINTER"));
+                        printLabel.setValue("LABEL", label.getString("LABEL"));
+
+                        if (getMboSet().getName().equals("STPRINTLABEL")) {
+                            String[] args = new String[]{getMboSet().getMbo().getOwner().getString("ITEMNUM")};
+                            ((PrintLabelSet) getMboSet()).execute();
+                            clientSession.showMessageBox("sharptree", "labelPrinted", args);
+                        }
                     }
                 }
-
             }
         }
     }
-
 }
 

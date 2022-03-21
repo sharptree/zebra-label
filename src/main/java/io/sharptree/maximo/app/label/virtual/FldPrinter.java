@@ -67,10 +67,13 @@ public class FldPrinter extends MboValueAdapter {
         if (labelList != null && labelList.count() == 1) {
             getMboValue("LABEL").setValue(labelList.getMbo(0).getString("VALUE"));
         } else {
+
             boolean foundDefault = false;
             MboRemote label = labelList.moveFirst();
             while (label != null) {
-                if (label.getBoolean("DEFAULT")) {
+                MboSetRemote labelSet = label.getMboSet("$stlabel","STLABEL", "label=:value");
+
+                if (!labelSet.isEmpty() && labelSet.getMbo(0).getBoolean("DEFAULT")) {
                     foundDefault = true;
                     getMboValue("LABEL").setValue(label.getString("VALUE"));
                     break;

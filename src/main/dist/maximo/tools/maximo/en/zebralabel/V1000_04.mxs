@@ -5,7 +5,7 @@
 			<set property="beanclass" value="io.sharptree.maximo.webclient.beans.zebralabel.PrintLabelBean"/>
 			<set property="id" value="zebralabelprint"/>
 			<set property="label" value="Print Label"/>
-			<set property="relationship" value="PRINTLABEL"/>
+			<set property="relationship" value="printlabel"/>
 		</add>
 		<add container="zebralabelprint" control="helpgrid">
 			<set property="id" value="1647385368852"/>
@@ -25,22 +25,16 @@
 			<set property="dataattribute" value="printer"/>
 			<set property="id" value="1647386372979"/>
 		</add>
+		<add container="1647390606849" control="textbox">
+			<set property="dataattribute" value="count"/>
+			<set property="id" value="1647382972612"/>
+		</add>
 		<add container="1647390612032" control="sectioncol">
 			<set property="id" value="1647390599298"/>
 		</add>
 		<add container="1647390599298" control="combobox">
 			<set property="dataattribute" value="label"/>
 			<set property="id" value="1647386368259"/>
-		</add>
-		<add container="1647382793325" control="sectionrow">
-			<set property="id" value="1647714891028"/>
-		</add>
-		<add container="1647714891028" control="sectioncol">
-			<set property="id" value="1647390591615"/>
-		</add>
-		<add container="1647390591615" control="textbox">
-			<set property="dataattribute" value="count"/>
-			<set property="id" value="1647382972612"/>
 		</add>
 		<add container="zebralabelprint" control="buttongroup">
 			<set property="id" value="1647382957610"/>
