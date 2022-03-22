@@ -18,6 +18,24 @@ import java.util.Objects;
  */
 public abstract class AutoScriptUtil {
 
+    public static void createObjectLaunchPointIfNotExists(Connection connection, String scriptName, String scriptPath, String description, String version, int dbIn) throws Exception {
+        if (connection == null) {
+            throw new Exception("The connection parameter is required and cannot be null");
+        }
+        if (scriptName == null || scriptName.trim().isEmpty()) {
+            throw new Exception("The scriptName parameter is required and cannot be null or blank.");
+        }
+
+        PreparedStatement autoscriptCheck = connection.prepareStatement("select 1 from autoscript where autoscript = ?");
+        autoscriptCheck.setString(1, scriptName);
+        ResultSet resultSet = autoscriptCheck.executeQuery();
+
+        if (!resultSet.next()) {
+            createOrUpdateScript(connection, scriptName, scriptPath, description, version, dbIn);
+        }
+
+    }
+
     @SuppressWarnings("unused")
     public static void createOrUpdateObjectLaunchPoint(Connection connection, String scriptName, String launchPointName, String description, String objectName, int objectEvent, int dbIn) throws Exception {
         if (connection == null) {

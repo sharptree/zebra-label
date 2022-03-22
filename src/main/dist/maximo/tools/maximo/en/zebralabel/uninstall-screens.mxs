@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updatescript version="7.1.0.0">
+    <systemlib apptype="webclient" id="library">
+        <remove container="library" control="zebralabelprint"/>
+    </systemlib>
+    <app apptype="webclient" id="inventor">
+        <remove container="main_invbalances_table_tablebody" control="1647383544651"/>
+    </app>
+    <app apptype="webclient" id="receipts">
+        <remove container="main_matreceiptstable_tablebody" control="1647719182972"/>
+    </app>
+    <app apptype="webclient" id="item">
+        <remove container="storeroom_inventorytable_tablebody" control="1647719182972"/>
+    </app>
+</updatescript>

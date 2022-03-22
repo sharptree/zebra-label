@@ -17,6 +17,20 @@
             "description": "Print a Barcode Label",
             "scriptFile": "stautoscript.zebralabel.printlabel.js",
             "version": "1.0.0"
+        },
+        {
+            "name": "STAUTOSCRIPT.ZEBRALABEL.LABELCFG",
+            "description": "Barcode Label Configurations",
+            "scriptFile": "stautoscript.zebralabel.labelcfg.js",
+            "replaceExisting": false,
+            "version": "1.0.0"
+        },
+        {
+            "name": "STAUTOSCRIPT.ZEBRALABEL.PRINTERCFG",
+            "description": "Barcode Printer Configurations",
+            "scriptFile": "stautoscript.zebralabel.printercfg.js",
+            "replaceExisting": false,
+            "version": "1.0.0"
         }
     ]
 }
