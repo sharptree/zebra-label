@@ -63,8 +63,19 @@ distributions {
 
 // Configure the distribution task to tar and gzip the results.
 tasks.distTar{
+    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/images")
+    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/README.md")
+    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
+    exclude("maximo/tools/maximo/en/zebralabel/script.dtd")
     compression = Compression.GZIP
     archiveExtension.set("tar.gz")
+}
+
+tasks.distZip{
+    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/images")
+    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/README.md")
+    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
+    exclude("maximo/tools/maximo/en/zebralabel/script.dtd")
 }
 
 tasks.jar {
