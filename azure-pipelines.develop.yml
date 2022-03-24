@@ -47,8 +47,8 @@ steps:
       runOptions: 'inline'
       inline: |        
         mv zebra-label*.tar.gz zebra-label.tar.gz
-        tar xzvf zebra-label.tar.gz
-        mv zebra-label-* zebra-label
+        mkdir zebra-label
+        tar xzvf zebra-label.tar.gz -C zebra-label
         (cd zebra-label && sudo cp -R * /opt/IBM/SMP/maximo) 
         (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./stopServer.sh MXServer)
         sleep 30
