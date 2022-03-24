@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.support.zipTo
+
 plugins {
     java
     distribution
@@ -33,25 +35,25 @@ repositories {
 }
 
 distributions {
+
     val distribution by configurations.creating {
         extendsFrom(configurations.implementation.get())
         isCanBeResolved = true
     }
 
     main {
-        distributionBaseName.set(distro.toLowerCase())
         contents {
-            into("maximo/applications/maximo/lib") {
+            into("applications/maximo/lib") {
                 from("$buildDir/libs/${product.toLowerCase()}.jar")
             }
-            into("maximo/applications/maximo/lib") {
+            into("applications/maximo/lib") {
                 from(distribution.filter { it.name.startsWith("guava") })
             }
-            into("maximo/applications/maximo/maximouiweb/webmodule/WEB-INF/lib") {
+            into("applications/maximo/maximouiweb/webmodule/WEB-INF/lib") {
                 from("$buildDir/libs/${product.toLowerCase()}-web.jar")
             }
 
-            into("maximo/tools/maximo/classes") {
+            into("tools/maximo/classes") {
                 includeEmptyDirs = false
                 from(layout.buildDirectory.dir("classes/java/main")) {
                     include("psdi/zebralabel/en/*.class")
@@ -62,21 +64,93 @@ distributions {
 }
 
 // Configure the distribution task to tar and gzip the results.
-tasks.distTar{
-    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/images")
-    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/README.md")
-    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
-    exclude("maximo/tools/maximo/en/zebralabel/script.dtd")
+tasks.distTar {
+    rootSpec
+    exclude("tools/maximo/classes/psdi/zebralabel/en/images")
+    exclude("tools/maximo/classes/psdi/zebralabel/en/README.md")
+    exclude("tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
+    exclude("tools/maximo/en/zebralabel/script.dtd")
     compression = Compression.GZIP
     archiveExtension.set("tar.gz")
 }
 
-tasks.distZip{
-    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/images")
-    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/README.md")
-    exclude("maximo/tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
-    exclude("maximo/tools/maximo/en/zebralabel/script.dtd")
+
+tasks.distZip {
+    println("Root " + archiveFile.get().asFile.path)
+    exclude("tools/maximo/classes/psdi/zebralabel/en/images")
+    exclude("tools/maximo/classes/psdi/zebralabel/en/README.md")
+    exclude("tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
+    exclude("tools/maximo/en/zebralabel/script.dtd")
+
 }
+
+tasks.assembleDist {
+    finalizedBy("fixzip")
+}
+
+tasks.register("fixzip"){
+    dependsOn("rezip", "retar")
+
+    doLast{
+        delete(layout.buildDirectory.asFile.get().path + File.separator + "distributions" + File.separator + "tmp")
+    }
+
+}
+
+tasks.register("unzip") {
+    val archiveBaseName = project.name + "-" + project.version
+    val distDir = layout.buildDirectory.asFile.get().path + File.separator + "distributions"
+
+    doLast {
+        copy {
+            from(zipTree(tasks.distZip.get().archiveFile.get().asFile))
+            into(distDir + File.separator + "tmp")
+        }
+    }
+}
+
+tasks.register<Zip>("rezip"){
+    dependsOn("unzip")
+    val archiveBaseName = project.name + "-" + project.version
+    val distDir = layout.buildDirectory.asFile.get().path + File.separator + "distributions"
+    val baseDir = File(distDir + File.separator + "tmp" + File.separator + archiveBaseName )
+
+    archiveFileName.set("$archiveBaseName.zip")
+
+    from(baseDir){
+        into("/")
+    }
+}
+
+tasks.register<Tar>("retar"){
+    dependsOn("unzip")
+    val archiveBaseName = project.name + "-" + project.version
+    val distDir = layout.buildDirectory.asFile.get().path + File.separator + "distributions"
+    val baseDir = File(distDir + File.separator + "tmp" + File.separator + archiveBaseName )
+
+    compression = Compression.GZIP
+    archiveExtension.set("tar.gz")
+
+    from(baseDir){
+        into("/")
+    }
+}
+
+tasks.register<Zip>("testzip"){
+    val archiveBaseName = project.name + "-" + project.version
+    val distDir = layout.buildDirectory.asFile.get().path + File.separator + "distributions"
+
+    val outputFile = File(distDir + File.separator + archiveBaseName + "-new.zip")
+    val baseDir = File(distDir + File.separator + "tmp" + File.separator + archiveBaseName)
+    val children = baseDir.walkTopDown().filter { it.isFile }
+
+    from(baseDir)
+    to(outputFile)
+}
+
+
+tasks.getByName("unzip").dependsOn("assembleDist")
+
 
 tasks.jar {
     archiveFileName.set("${product.toLowerCase()}.jar")

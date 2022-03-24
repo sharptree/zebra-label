@@ -72,6 +72,7 @@ function _convertMboToObject(mbo) {
     label.media = mbo.getString("MEDIA");
     label.usewith = mbo.getString("USEWITH");
     label.zpl = mbo.getString("ZPL");
+    label.default = mbo.getBoolean("DEFAULT");
 
     return label;
 }
