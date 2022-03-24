@@ -4,7 +4,7 @@ The Maximo Zebra Printing extension adds the ability to define Zebra labels and 
 # Install
 ## Maximo 7.6.1.x
 To install the Maximo Zebra Printing extension for Maximo 7.6.1.x perform the following steps.
-1. Download `zebra-label-x.y.z.tar.gz` or `zebra-label-x.y.z.zip`from the project Release page.
+1. Download `zebra-label-x.y.z.tar.gz` or `zebra-label-x.y.z.zip` from the project Release page.
 2. Unzip the archive to the [SMP_HOME]/maximo directory, for example `/opt/IBM/SMP/maximo` (unix) or `C:\IBM\SMP\maximo` (windows).
 3. Stop the Maximo application server in WebSphere.
 4. Open a terminal as root or using sudo (unix) or as Administrator (windows) and navigate to [SMP_HOME]/maximo/tools/maximo.
