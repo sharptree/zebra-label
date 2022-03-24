@@ -88,12 +88,10 @@ tasks.distTar {
 
 
 tasks.distZip {
-    println("Root " + archiveFile.get().asFile.path)
     exclude("tools/maximo/classes/psdi/zebralabel/en/images")
     exclude("tools/maximo/classes/psdi/zebralabel/en/README.md")
     exclude("tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
     exclude("tools/maximo/en/zebralabel/script.dtd")
-
 }
 
 tasks.assembleDist {
