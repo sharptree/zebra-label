@@ -245,13 +245,6 @@
             </sql>
         </freeform>
 
-        <!-- Make sure that the STLABEL app is custom so it shows up as licensed -->
-        <freeform description="Make the STLABEL application based on CUSTAPP so it shows up licensed.">
-            <sql>
-                update maxapps set originalapp = 'CUSTAPP' where app = 'STLABEL';
-            </sql>
-        </freeform>
-
         <!-- Create the integration object for STAUTOSCRIPT-->
         <freeform description="Create STAUTOSCRIPT if it does not exist">
             <sql>

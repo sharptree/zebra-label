@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT updatescript (app|systemlib)>
+<!ATTLIST updatescript
+	version CDATA #REQUIRED
+>
+
+<!ELEMENT app (add|modify|move|remove|removenow)>
+<!ATTLIST app
+	apptype (webclient|mobileapp-cdc) #REQUIRED
+	id #REQUIRED
+
+<!ELEMENT systemlib (add|modify|move|remove|removenow)>
+<!ATTLIST systemlib
+	apptype (webclient|mobileapp-cdc) #REQUIRED
+	id #REQUIRED
+
+<!ELEMENT add (set)>
+<!ATTLIST add
+		control (appbar|attachments|blankline|breadcrumbs|buttongroup|checkbox|combobox|dialog|datasrc|defaultvalue|helpgrid|hyperlink|image|
+				include|listbox|mapcontrol|menubar|multilinetextbox|multiparttextbox|paramvalue|paramvalues|pushbutton|radiobutton|
+				radiobuttongroup|recordimage|richtexteditor|richtextviewer|section|sectioncol|sectionheader|sectionrow|statictext|tab|
+				tabgroup|table|tablecol|textbox|tree|treeattribute|treenode) #REQUIRED
+		container CDATA
+		before CDATA
+		after CDATA
+
+<!ELEMENT modify (set|clear)>
+<!ATTLIST modify
+	control (appbar|attachments|blankline|breadcrumbs|buttongroup|checkbox|combobox|dialog|datasrc|defaultvalue|helpgrid|hyperlink|image|
+			include|listbox|mapcontrol|menubar|multilinetextbox|multiparttextbox|paramvalue|paramvalues|pushbutton|radiobutton|
+			radiobuttongroup|recordimage|richtexteditor|richtextviewer|section|sectioncol|sectionheader|sectionrow|statictext|tab|
+			tabgroup|table|tablecol|textbox|tree|treeattribute|treenode) #REQUIRED
+	container CDATA
+	before CDATA
+
+<!ELEMENT move EMPTY>
+<!ATTLIST move
+	child CDATA #REQUIRED
+	container CDATA #REQUIRED
+	before CDATA
+
+<!ELEMENT remove EMPTY>
+<!ATTLIST remove
+	child CDATA #REQUIRED
+	container CDATA #REQUIRED
+	before CDATA
+
+<!ELEMENT removenow EMPTY>
+<!ATTLIST removenow
+		child CDATA #REQUIRED
+		container CDATA #REQUIRED
+		before CDATA
+
+<!ELEMENT set EMPTY>
+<!ATTLIST set
+	property CDATA #REQUIRED
+	value CDATA #REQUIRED
+
+<!ELEMENT clear EMPTY>
+<!ATTLIST clear
+	property CDATA #REQUIRED
+

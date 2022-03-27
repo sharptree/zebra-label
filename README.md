@@ -42,6 +42,8 @@ user=your user name
 password=your password
 ```
 
+
+
 ![File URL](images/mas-deploy-customization-file-url.png)
 
 Click the `Apply changes` button at the top of the page to apply the changes.

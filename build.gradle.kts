@@ -81,7 +81,6 @@ tasks.distTar {
     exclude("tools/maximo/classes/psdi/zebralabel/en/images")
     exclude("tools/maximo/classes/psdi/zebralabel/en/README.md")
     exclude("tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
-    exclude("tools/maximo/en/zebralabel/script.dtd")
     compression = Compression.GZIP
     archiveExtension.set("tar.gz")
 }
@@ -91,7 +90,6 @@ tasks.distZip {
     exclude("tools/maximo/classes/psdi/zebralabel/en/images")
     exclude("tools/maximo/classes/psdi/zebralabel/en/README.md")
     exclude("tools/maximo/classes/psdi/zebralabel/en/resources/manifest.json")
-    exclude("tools/maximo/en/zebralabel/script.dtd")
 }
 
 tasks.assembleDist {
@@ -228,5 +226,5 @@ dependencies {
      */
     compileOnly("com.ibm.maximo:asset-management:7.6.1.2")
     compileOnly("com.ibm.maximo:webclient:7.6.1.2")
-    compileOnly("com.ibm.maximo:tools:7.6.0.0")
+    compileOnly("com.ibm.maximo:tools:7.6.1.2")
 }
