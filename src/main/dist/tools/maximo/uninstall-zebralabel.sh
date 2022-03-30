@@ -8,6 +8,7 @@
 
 # Remove the product files.
 rm -f ../../../maximo/deployment/product/zebralabel.xml
+rm -f ../../../maximo/applications/maximo/businessobjects/classes/psdi/app/signature/apps/STLABEL.key
 rm -f ../../../maximo/applications/maximo/lib/zebra-label.jar
 rm -f ../../../maximo/applications/maximo/lib/guava-31.0.1-jre.jar
 rm -f ../../../maximo/applications/maximo/properties/product/zebralabel.xml
