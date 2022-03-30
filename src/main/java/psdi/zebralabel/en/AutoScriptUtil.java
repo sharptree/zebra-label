@@ -15,10 +15,23 @@ import java.util.Objects;
 
 /**
  * Utility class that adds or updates an automation script to Maximo from the UpdateDB / DBC process.
+ *
+ * @author Jason VenHuizen
  */
 public abstract class AutoScriptUtil {
 
-    public static void createObjectLaunchPointIfNotExists(Connection connection, String scriptName, String scriptPath, String description, String version, int dbIn) throws Exception {
+    /**
+     * Create a new script if it does not already exist.
+     *
+     * @param connection  the database connection reference.
+     * @param scriptName  the name of the script to create if it does not exist.
+     * @param scriptPath  the path to the script source.
+     * @param description a description of the script.
+     * @param version     the version of the script.
+     * @param dbIn        the type of database.
+     * @throws Exception thrown if an error occurs creating the script.
+     */
+    public static void createScriptIfNotExists(Connection connection, String scriptName, String scriptPath, String description, String version, int dbIn) throws Exception {
         if (connection == null) {
             throw new Exception("The connection parameter is required and cannot be null");
         }
@@ -36,6 +49,17 @@ public abstract class AutoScriptUtil {
 
     }
 
+    /**
+     *
+     * @param connection
+     * @param scriptName
+     * @param launchPointName
+     * @param description
+     * @param objectName
+     * @param objectEvent
+     * @param dbIn
+     * @throws Exception
+     */
     @SuppressWarnings("unused")
     public static void createOrUpdateObjectLaunchPoint(Connection connection, String scriptName, String launchPointName, String description, String objectName, int objectEvent, int dbIn) throws Exception {
         if (connection == null) {
