@@ -64,7 +64,7 @@
 
 
         <!-- Add the application properties -->
-        <add_property name="sharptree.zebralabel.maxcount" description="Maximum number of label copies to print." maxtype="INTEGER" secure_level="public" />
+        <add_property name="sharptree.zebralabel.maxcount" description="Maximum number of label copies to print." maxtype="INTEGER" secure_level="public" value="10"/>
 
         <!-- create application for label configuration. -->
         <create_app app="STLABEL" description="Label Configuration" maintbname="STLABEL" />
