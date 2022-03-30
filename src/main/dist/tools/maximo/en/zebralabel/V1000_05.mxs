@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE updatescript SYSTEM "updatescript.dtd">
 <updatescript version="7.1.0.0">
 	<app apptype="webclient" id="inventor">
 		<add before="main_invbalances_table_tablebody_13" container="main_invbalances_table_tablebody" control="tablecol">

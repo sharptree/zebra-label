@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE updatescript SYSTEM "updatescript.dtd">
 <updatescript version="7.1.0.0">
 	<app apptype="webclient" id="item">
 		<add after="storeroom_inventorytable_tablebody_10" container="storeroom_inventorytable_tablebody" control="tablecol">
