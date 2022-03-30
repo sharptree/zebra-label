@@ -144,21 +144,7 @@ tasks.register<Tar>("retar"){
     }
 }
 
-tasks.register<Zip>("testzip"){
-    val archiveBaseName = project.name + "-" + project.version
-    val distDir = layout.buildDirectory.asFile.get().path + File.separator + "distributions"
-
-    val outputFile = File(distDir + File.separator + archiveBaseName + "-new.zip")
-    val baseDir = File(distDir + File.separator + "tmp" + File.separator + archiveBaseName)
-    val children = baseDir.walkTopDown().filter { it.isFile }
-
-    from(baseDir)
-    to(outputFile)
-}
-
-
 tasks.getByName("unzip").dependsOn("assembleDist")
-
 
 tasks.jar {
     archiveFileName.set("${product.toLowerCase()}.jar")
@@ -219,7 +205,7 @@ dependencies {
      * places them in the libs directory on this project.  The comment the non-local dependencies.
      */
 
-    compileOnly(fileTree( "libs", { listOf("*.jar") } ))
+    compileOnly(fileTree( "libs") { listOf("*.jar") })
 
     /*
      * Comment out or remove the following lines if using local Maximo jar dependencies.
