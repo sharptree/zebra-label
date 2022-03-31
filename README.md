@@ -131,7 +131,7 @@ The ZPL below is an example of a simple barcode label that prints the item descr
 
 ^FX Description of the item
 ^CFA,30
-^FO50,50^FD:INVENTORY.DESCRIPTION^FS
+^FO50,50^FD:INVENTORY.ITEM.DESCRIPTION^FS
 ^FO50,120^GB700,3,3^FS
 
 ^FX Section with bar code.
