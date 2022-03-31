@@ -106,7 +106,6 @@ tasks.register("fixzip"){
 }
 
 tasks.register("unzip") {
-    val archiveBaseName = project.name + "-" + project.version
     val distDir = layout.buildDirectory.asFile.get().path + File.separator + "distributions"
 
     doLast {
@@ -127,6 +126,7 @@ tasks.register<Zip>("rezip"){
 
     from(baseDir){
         into("/")
+        exclude("maximo/**")
     }
 }
 
@@ -141,6 +141,7 @@ tasks.register<Tar>("retar"){
 
     from(baseDir){
         into("/")
+        exclude("maximo/**")
     }
 }
 
