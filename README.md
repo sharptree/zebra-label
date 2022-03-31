@@ -136,7 +136,7 @@ The ZPL below is an example of a simple barcode label that prints the item descr
 
 ^FX Section with bar code.
 ^BY5,2,150
-^FO100,170^BC^FD:ITMENUM^FS
+^FO100,170^BC^FD:ITEMNUM^FS
 
 ^XZ
 ```
