@@ -155,3 +155,22 @@ When a user clicks the print button, if a single printer and label combination i
 The user can optionally select to print more than one label by entering  a `Count` value.  The maximum number of labels that can be printed is 10 by default and can be specified by the `sharptree.zebralabel.maxcount` System Property.
 
 ![Print Dialog](images/print-label-dialog.png)
+
+# Build
+## Maximo Dependencies
+To build the *zebra-label* project, you will need the Maximo `businessobjects.jar`, classes from the Maximo maximouiweb classes and the Maximo tools classes. The `businessobjects.jar` file can be obtained by unzipping the `maximo.ear` file and copying the file.
+
+The Maximo maximouiweb classes are not provided as a jar file and therefore must be created.  Open a terminal (unix) or command (windows) window and navigate to the [SMP_HOME]/maximo/applications/maximo/maximouiweb/webmodule/WEB-INF/classes/ folder.  Run the following command.
+
+```shell
+jar cf maximo-webclient.jar *
+```
+
+The Maximo tools classes are not provided as a jar file and therefore must be created.  Open a terminal (unix) or command (windows) window and navigate to the [SMP_HOME]/maximo/tools/maximo/classes folder.  Run the following command.
+```shell
+jar cf maximo-tools.jar *
+```
+Copy the `businessobjects.jar`, `maximo-webclient.jar` and `maximo-tools.jar` to the project's `libs` directory.
+
+## Gradle assembleDist
+To build the project run the gradle `assembleDist` task.
