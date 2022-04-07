@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="uninstall" >
+    <description>Uninstall Zebra Barcode.</description>
+
+    <statements>
+        <drop_service servicename="STLABEL"/>
+        <drop_domain domainid="LABELMEDIA"/>
+        <drop_domain domainid="LABELUSEWITH"/>
+        <drop_app app="STLABEL"/>
+        <drop_table object="STLABEL"/>
+        <drop_table object="STPRINTER"/>
+        <drop_table object="STPRINTLABEL"/>
+
+        <drop_property name="sharptree.zebralabel.maxcount"/>
+        <drop_app app="STLABEL" />
+
+        <!-- Create presentation entry for the Label Configuration application -->
+        <freeform description="Label Configuration Presentation Definition">
+            <sql>
+                delete alndomain where domainid = 'LABELMEDIA';
+                delete alndomain where domainid = 'LABELUSEWITH';
+                delete maxpresentation where app = 'STLABEL';
+                delete maxlabels where app = 'STLABEL';
+                delete maxdataprefix where prefix = 'STXAB';
+                delete maxmessages where msgid like 'STXAB%';
+                delete maxmenu where moduleapp = 'STLABEL';
+                delete maxmenu where keyvalue = 'STLABEL';
+                delete sigoption where app = 'STLABEL';
+                delete applicationauth where app = 'STLABEL';
+            </sql>
+        </freeform>
+        
+        <drop_maxvar name="ZEBRALABEL"/>
+
+    </statements>
+</script>

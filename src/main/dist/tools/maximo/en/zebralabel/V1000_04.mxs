@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updatescript version="7.1.0.0">
+	<systemlib apptype="webclient" id="library">
+		<add container="library" control="dialog">
+			<set property="beanclass" value="io.sharptree.maximo.webclient.beans.zebralabel.PrintLabelBean"/>
+			<set property="id" value="zebralabelprint"/>
+			<set property="label" value="Print Label"/>
+			<set property="relationship" value="printlabel"/>
+		</add>
+		<add container="zebralabelprint" control="helpgrid">
+			<set property="id" value="1647385368852"/>
+			<set property="innerhtml" value="Select the printer and label to print for the current record.  The count is the number of labels to print."/>
+		</add>
+		<add container="zebralabelprint" control="section">
+			<set property="border" value="true"/>
+			<set property="id" value="1647382793325"/>
+		</add>
+		<add container="1647382793325" control="sectionrow">
+			<set property="id" value="1647390612032"/>
+		</add>
+		<add container="1647390612032" control="sectioncol">
+			<set property="id" value="1647390606849"/>
+		</add>
+		<add container="1647390606849" control="combobox">
+			<set property="dataattribute" value="printer"/>
+			<set property="id" value="1647386372979"/>
+		</add>
+		<add container="1647390606849" control="textbox">
+			<set property="dataattribute" value="count"/>
+			<set property="id" value="1647382972612"/>
+		</add>
+		<add container="1647390612032" control="sectioncol">
+			<set property="id" value="1647390599298"/>
+		</add>
+		<add container="1647390599298" control="combobox">
+			<set property="dataattribute" value="label"/>
+			<set property="id" value="1647386368259"/>
+		</add>
+		<add container="zebralabelprint" control="buttongroup">
+			<set property="id" value="1647382957610"/>
+		</add>
+		<add container="1647382957610" control="pushbutton">
+			<set property="default" value="true"/>
+			<set property="id" value="1647382962831"/>
+			<set property="label" value="Print"/>
+			<set property="mxevent" value="dialogok"/>
+		</add>
+		<add container="1647382957610" control="pushbutton">
+			<set property="id" value="1647383703673"/>
+			<set property="label" value="Cancel"/>
+			<set property="mxevent" value="dialogcancel"/>
+		</add>
+		<modify control="ifimport_grid1a_1_1_type_3">
+			<set property="label" value="Flat File:"/>
+		</modify>
+		<modify control="viewdep_sectiongroup1_row2_col1_sec1_tabgrp1_tab1">
+			<set property="label" value="Schedule for"/>
+		</modify>
+		<modify control="managedep_sectiongroup1_row2_col1_sec1_tabgrp1_tab1a">
+			<set property="label" value="Preview"/>
+		</modify>
+	</systemlib>
+</updatescript>

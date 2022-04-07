@@ -1,0 +1,66 @@
+
+trigger:
+- develop
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: archiva-access
+  - group: websphere-develop
+
+steps:
+  - task: InstallSSHKey@0
+    inputs:
+      knownHostsEntry: 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC7Jjdz2LqyM3femuSllOAlxvLn7iDyhiVtpNmKV/kSaS4g1egVzf5OkfShhEu54ESICkWLdOsCZ/Px8QHKz6XU='
+      sshKeySecureFile: 'azure_develop_deploy'
+      configUser: azure-deploy
+
+  # Include the common steps for building the console app
+  - template: azure-pipelines.common.yml
+  - task: SSH@0
+    inputs:
+      sshEndpoint: 'zebra-label.sharptree.dev'
+      runOptions: 'inline'
+      inline: |
+        rm -rf *.py 2> /dev/null
+        rm -rf zebra* 2> /dev/null
+        rm -rf *.env 2> /dev/null
+      readyTimeout: '20000'
+  - task: CopyFilesOverSSH@0
+    inputs:
+      sshEndpoint: 'zebra-label.sharptree.dev'
+      sourceFolder: './build/distributions'
+      contents: 'zebra-label-*.tar.gz'
+      targetFolder: './'
+      readyTimeout: '20000'
+  - task: CopyFilesOverSSH@0
+    inputs:
+      sshEndpoint: 'zebra-label.sharptree.dev'
+      sourceFolder: './deploy'
+      contents: '*'
+      targetFolder: './'
+      readyTimeout: '20000'
+  - task: SSH@0
+    inputs:
+      sshEndpoint: 'zebra-label.sharptree.dev'
+      runOptions: 'inline'
+      inline: |        
+        mv zebra-label*.tar.gz zebra-label.tar.gz
+        mkdir zebra-label
+        tar xzvf zebra-label.tar.gz -C zebra-label
+        (cd zebra-label && sudo cp -R * /opt/IBM/SMP/maximo) 
+        (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./stopServer.sh MXServer)
+        sleep 30
+        (cd /opt/IBM/SMP/maximo/tools/maximo/ && sudo ./updatedb.sh)
+        (cd /opt/IBM/SMP/maximo/deployment/ && sudo ./buildmaximoearwas8.sh)        
+        sudo cp deploy-application.py /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py 
+        sudo cp wsadminlib.py /opt/IBM/SMP/ConfigTool/scripts/wsadminlib.py     
+        export $(grep -v '^#' /home/azure-deploy/was.env | xargs)        
+        (cd /opt/IBM/SMP/ConfigTool/scripts/ && sudo /opt/IBM/SMP/ConfigTool/wasclient/ThinWsadmin.sh -username "${WASADMIN_USER}" -password "${WASADMIN_PASSWORD}" -host localhost -f /opt/IBM/SMP/ConfigTool/scripts/deploy-application.py /opt/IBM/SMP/maximo/deployment/default/maximo.ear MAXIMO maximo_host ctgCell01 ctgNode01 MXServer webserver1 )
+        sleep 30
+        (cd /opt/IBM/WebSphere/AppServer/profiles/ctgAppSrv01/bin && sudo ./startServer.sh MXServer)        
+        rm -rf *.py 2> /dev/null
+        rm -rf zebra* 2> /dev/null
+        rm -rf *.env 2> /dev/null
+      readyTimeout: '20000'

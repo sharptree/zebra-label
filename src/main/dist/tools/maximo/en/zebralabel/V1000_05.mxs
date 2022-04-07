@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updatescript version="7.1.0.0">
+	<app apptype="webclient" id="inventor">
+		<add before="main_invbalances_table_tablebody_13" container="main_invbalances_table_tablebody" control="tablecol">
+			<set property="id" value="1647383544651"/>
+			<set property="mxevent" value="zebralabelprint"/>
+			<set property="mxevent_desc" value="Print Label"/>
+			<set property="mxevent_icon" value="nav_icon_print.gif"/>
+			<set property="type" value="event"/>
+		</add>
+	</app>
+</updatescript>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="uninstall-shared" >
+    <description>Uninstall Zebra Barcode components that are shared with Opqo if Opqo is not installed.</description>
+
+    <check>
+        <check_query query="select * from autoscript where autoscript = 'STAUTOSCRIPT.STAMVERSION'"/>
+    </check>
+
+    <statements>
+        <!-- Create presentation entry for the Label Configuration application -->
+        <freeform description="Label Configuration Presentation Definition">
+            <sql>
+                delete maxintobject where intobjectname = 'STAUTOSCRIPT';
+                delete maxintobjdetail where intobjectname = 'STAUTOSCRIPT';
+                delete sigoption where app = 'STAUTOSCRIPT';
+                delete applicationauth where app = 'STAUTOSCRIPT';
+                delete autoscript where autoscript like 'STAUTOSCRIPT.ZEBRALABEL%';
+                delete maxapps where app = 'STAUTOSCRIPT';
+            </sql>
+        </freeform>
+    </statements>
+</script>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_01">
+    <description>Barcode Printing Automation Scripts</description>
+    <statements>
+    </statements>
+</script>

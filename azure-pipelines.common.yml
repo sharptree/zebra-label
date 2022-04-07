@@ -1,0 +1,20 @@
+steps:
+  - checkout: self
+    submodules: true
+    persistCredentials: true
+
+  - bash: |
+      echo "archivaUserName=$(ARCHIVA_USERNAME)" >> gradle.properties
+      echo "archivaPassword=$(ARCHIVA_PASSWORD)" >> gradle.properties
+      echo "export WASADMIN_USER=$(WASADMIN_USER)" >> ./deploy/was.env
+      echo "export WASADMIN_PASSWORD=$(WASADMIN_PASSWORD)" >> ./deploy/was.env
+  
+  - task: Gradle@3
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'assembleDist'
+      publishJUnitResults: false
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      sonarQubeRunAnalysis: false
+      spotBugsAnalysis: false
