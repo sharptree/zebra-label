@@ -194,7 +194,7 @@ dependencies {
     compileOnly("javax.servlet:javax.servlet-api:4.0.1")
 
     /**
-     * Maximo's libraries needed for compiling the application.
+     * Maximo's libraries are needed for compiling the application.
      *
      * asset-management - the businessobjects.jar
      * webclient - classes from the maximouiweb/WEB-INF/classes folder

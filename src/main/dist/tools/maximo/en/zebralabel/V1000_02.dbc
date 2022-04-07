@@ -190,7 +190,7 @@
         </insert>
 
         <!-- Create the prefix for the STXAB messages, which are reserved for the label applciation -->
-        <freeform description="Add STXAB Message Prefrix and delete any messages in that name space.">
+        <freeform description="Add STXAB Message Prefix and delete any messages in that name space.">
             <sql>
                 insert into maxdataprefix(prefix, product,maxdataprefixid) select 'STXAB', 'Addon Sharptree Products', maxdataprefixseq.nextval from dummy_table where not exists (select 1 from maxdataprefix where prefix = 'STXAB');
                 delete maxmessages where msgid like 'STXAB%'
@@ -306,7 +306,7 @@
         <add_sigoption app="STLABEL" optionname="SEARCHWHER" description="Where Clause" />
 
         <!-- Grant the Maximo administration access to the Label Configuration application.-->
-        <freeform description="Grant the Maximo adminstation group access to the Label Configuration applciation">
+        <freeform description="Grant the Maximo adminstation group access to the Label Configuration application">
             <sql>
                 INSERT INTO APPLICATIONAUTH (GROUPNAME, APP, OPTIONNAME, APPLICATIONAUTHID) SELECT (SELECT VARVALUE FROM MAXVARS m WHERE VARNAME = 'ADMINGROUP'), 'STLABEL', OPTIONNAME , APPLICATIONAUTHSEQ.NEXTVAL FROM SIGOPTION WHERE APP = 'STLABEL';
                 INSERT INTO APPLICATIONAUTH (GROUPNAME, APP, OPTIONNAME, APPLICATIONAUTHID) SELECT (SELECT VARVALUE FROM MAXVARS m WHERE VARNAME = 'ADMINGROUP'), 'STAUTOSCRIPT', OPTIONNAME , APPLICATIONAUTHSEQ.NEXTVAL FROM SIGOPTION WHERE APP = 'STAUTOSCRIPT';
