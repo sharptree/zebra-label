@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+	The zebralabel product xml ensures that the zebra-label.jar is
+	included in the Maximo EAR build and is added to the
+	buisnessobject.jar classpath.
+-->
+<product name="zebralabel">
+    <targetupdate>
+        <targetname>init</targetname>
+        <content>
+            <update>
+                <property name="maximo.businessobjectsclasspath" value="zebra-label.jar guava-31.0.1-jre" />
+            </update>
+        </content>
+    </targetupdate>
+</product>
