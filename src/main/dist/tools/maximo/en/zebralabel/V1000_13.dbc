@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_13">
+    <description>Migrate from DEFAULT to ISDEFAULT attribute.</description>
+    <check>
+        <check_query query="select 1 from maxattribute where objectname = 'STLABEL' and attributename = 'ISDEFAULT'"/>
+    </check>
+
+    <statements>
+        <add_attributes object="STLABEL">
+            <attrdef attribute="ISDEFAULT" title="Default" remarks="Is the default label for the media type?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultLabel" defaultvalue="0" required="true"/>
+        </add_attributes>
+        <add_attributes object="STPRINTER">
+            <attrdef attribute="ISDEFAULT" title="Default" remarks="Is the default label for the media type?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultLabel" defaultvalue="0" required="true"/>
+        </add_attributes>
+    </statements>
+</script>

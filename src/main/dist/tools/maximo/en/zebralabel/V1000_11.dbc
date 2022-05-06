@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_11">
+    <description>Add Sharptree logger.</description>
+    <statements>
+        <freeform description="Create the Sharptree logger and Label sub logger.">
+            <sql>
+                INSERT INTO maxlogger (maxloggerid, logger, loglevel, logkey, active, internal)
+                SELECT maxloggerseq.nextval, 'sharptree', 'ERROR', 'log4j.logger.maximo.sharptree', 1, 0 FROM dummy_table WHERE NOT EXISTS (SELECT 1 FROM MAXLOGGER WHERE logkey = 'log4j.logger.maximo.sharptree');
+
+                INSERT INTO maxlogger (maxloggerid, logger, loglevel, logkey, parentloggerid,  active, internal)
+                SELECT maxloggerseq.nextval, 'label', 'ERROR', 'log4j.logger.maximo.sharptree.label', (SELECT MAXLOGGERID FROM MAXLOGGER WHERE logkey = 'log4j.logger.maximo.sharptree'), 1, 0 FROM dummy_table WHERE NOT EXISTS (SELECT 1 FROM MAXLOGGER WHERE logkey = 'log4j.logger.maximo.sharptree.label');
+            </sql>
+        </freeform>
+    </statements>
+</script>

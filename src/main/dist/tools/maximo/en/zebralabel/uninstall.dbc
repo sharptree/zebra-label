@@ -12,6 +12,7 @@
         <drop_table object="STPRINTER"/>
         <drop_table object="STPRINTLABEL"/>
 
+
         <drop_property name="sharptree.zebralabel.maxcount"/>
         <drop_app app="STLABEL" />
 
@@ -28,6 +29,12 @@
                 delete maxmenu where keyvalue = 'STLABEL';
                 delete sigoption where app = 'STLABEL';
                 delete applicationauth where app = 'STLABEL';
+                delete maxlogger where logkey LIKE 'log4j.logger.maximo.sharptree.label%';
+                delete maxlogger where logkey = 'log4j.logger.maximo.sharptree' AND NOT EXISTS (SELECT 1 FROM maxlogger WHERE logkey LIKE 'log4j.logger.maximo.sharptree%'  AND logkey != 'log4j.logger.maximo.sharptree' );
+                DELETE MAXOBJECT m WHERE OBJECTNAME  = 'STPRINTLABEL';
+                DELETE MAXOBJECTCFG m WHERE OBJECTNAME  = 'STPRINTLABEL';
+                DELETE MAXATTRIBUTE m WHERE OBJECTNAME  = 'STPRINTLABEL';
+                DELETE MAXATTRIBUTECFG m WHERE OBJECTNAME  = 'STPRINTLABEL';
             </sql>
         </freeform>
         

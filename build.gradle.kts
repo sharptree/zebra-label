@@ -1,21 +1,30 @@
+@file:Suppress("KDocUnresolvedReference")
+
 plugins {
     java
     distribution
 }
 
 group = "io.sharptree"
-version = "1.0.0"
+version = "1.1.0"
 
 val vendor = "Sharptree"
 val product = "zebra-label"
 val distro = "zebra-label"
 
-project.version = "1.0.0"
+project.version = "1.1.0"
 
 tasks.compileJava {
     sourceCompatibility = "1.8"
     targetCompatibility = "1.8"
 }
+
+
+configurations.register("installation").configure {
+    extendsFrom(configurations.implementation.get())
+    isTransitive = false
+}
+
 
 repositories {
     mavenCentral()
@@ -36,6 +45,7 @@ distributions {
             into("applications/maximo/lib") {
                 from(distribution.filter { it.name.startsWith("guava") })
             }
+
             into("applications/maximo/maximouiweb/webmodule/WEB-INF/lib") {
                 from("$buildDir/libs/${product.toLowerCase()}-web.jar")
             }
@@ -87,6 +97,10 @@ tasks.register("unzip") {
         copy {
             from(zipTree(tasks.distZip.get().archiveFile.get().asFile))
             into(distDir + File.separator + "tmp")
+        }
+        copy {
+            from(zipTree(configurations.getByName("installation").filter { it.name.startsWith("semver") }.singleFile))
+            into(distDir + File.separator + "tmp/${project.name}-${version}/tools/maximo/classes")
         }
     }
 }
@@ -175,11 +189,17 @@ dependencies {
      * webclient - classes from the maximouiweb/WEB-INF/classes folder
      * tools - classes from the [SMP_HOME]/maximo/tools/maximo/classes folder
      *
-     *
      * If you are not a Sharptree developer, but have access to a Maximo instance you can zip the required into jar files and
      * places them in the libs directory on this project.  The comment the non-local dependencies.
      */
 
     compileOnly(fileTree( "libs") { listOf("*.jar") })
+
+    compileOnly("com.google.code.gson:gson:2.2.4")
+
+    /**
+     * Semantic versioning for checking script versions.
+     */
+    implementation("com.vdurmont:semver4j:3.1.0")
 
 }

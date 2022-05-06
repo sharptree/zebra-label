@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_09">
+    <description>Add remote flag to the printer configuration.</description>
+    <statements>
+        <add_attributes object="STPRINTER">
+            <attrdef attribute="REMOTE" title="Remote" remarks="Is the printer remote?" maxtype="YORN" required="true" defaultvalue="0"/>
+        </add_attributes>
+    </statements>
+</script>

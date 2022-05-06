@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_12">
+    <description>Add Asset and Location Barcode Printing.</description>
+    <statements>
+        <!-- Add Asset and Locations object to label use with-->
+        <specify_aln_domain domainid="LABELUSEWITH" length="30" description="Label Use With Objects" >
+            <alnvalueinfo value="ASSET" description="Asset"/>
+            <alnvalueinfo value="LOCATIONS" description="Locations"/>
+        </specify_aln_domain>
+
+        <create_relationship parent="ASSET" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
+        <create_relationship parent="LOCATIONS" name="PRINTLABEL" child="STPRINTLABEL" whereclause="" remarks="Relationship to print barcode labels."/>
+
+        <add_sigoption app="ASSET" optionname="ZEBRALABELPRINT" description="Print Label" />
+        <add_sigoption app="LOCATION" optionname="ZEBRALABELPRINT" description="Print Label" />
+
+        <freeform description="Create new toolbar menu items.">
+            <sql>
+
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPTOOL', 'ASSET', (SELECT max(position) +100 FROM maxmenu WHERE MODULEAPP  = 'ASSET'), 0, 'SEP', 'SEPZEBRA', null, null, 1,null, null, 'MAIN', maxmenuseq.nextval);
+
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPTOOL', 'ASSET', (SELECT max(position) +110 FROM maxmenu WHERE MODULEAPP  = 'ASSET'), 0, 'OPTION', 'ZEBRALABELPRINT', null, null, 1, 'nav_icon_print.gif', null, 'MAIN', maxmenuseq.nextval);
+
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPTOOL', 'LOCATION', (SELECT max(position) +100 FROM maxmenu WHERE MODULEAPP  = 'ASSET'), 0, 'SEP', 'SEPZEBRA', null, null, 1,null, null, 'MAIN', maxmenuseq.nextval);
+
+                insert into maxmenu(menutype, moduleapp, position, subposition, elementtype, keyvalue, headerdescription, url, visible, image, accesskey, tabdisplay, maxmenuid)
+                values('APPTOOL', 'LOCATION', (SELECT max(position) +110 FROM maxmenu WHERE MODULEAPP  = 'ASSET'), 0, 'OPTION', 'ZEBRALABELPRINT', null, null, 1, 'nav_icon_print.gif', null, 'MAIN', maxmenuseq.nextval);
+
+                INSERT INTO APPLICATIONAUTH (GROUPNAME, APP, OPTIONNAME, APPLICATIONAUTHID) SELECT (SELECT VARVALUE FROM MAXVARS m WHERE VARNAME = 'ADMINGROUP'), 'ASSET', OPTIONNAME , APPLICATIONAUTHSEQ.NEXTVAL FROM SIGOPTION WHERE APP = 'ASSET' and optionname = 'ZEBRALABELPRINT';
+                INSERT INTO APPLICATIONAUTH (GROUPNAME, APP, OPTIONNAME, APPLICATIONAUTHID) SELECT (SELECT VARVALUE FROM MAXVARS m WHERE VARNAME = 'ADMINGROUP'), 'LOCATION', OPTIONNAME , APPLICATIONAUTHSEQ.NEXTVAL FROM SIGOPTION WHERE APP = 'LOCATIONS' and optionname = 'ZEBRALABELPRINT';
+            </sql>
+        </freeform>
+    </statements>
+</script>

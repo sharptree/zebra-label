@@ -36,7 +36,7 @@ If checked, uncheck the `System managed` switch for the `Customization` section.
 
 ![System mananged switch](images/mas-deploy-customization-sys-manage.png)
 
-In the `File Address` field enter the URL for the `zebra-label-x.y.z.zip` archive.  This can be hosted on a self-hosted server or from the GitHub release URL, such as `https://github.com/sharptree/zerba-label/archive/refs/tags/v1.0.0.zip`.  If using a self-hosted site, optional credentials can be provided by entering the username and password in the following format.
+In the `File Address` field enter the URL for the `zebra-label-x.y.z.zip` archive.  This can be hosted on a self-hosted server or from the GitHub release URL, such as `https://github.com/sharptree/zebra-label/releases/download/public/1.1.0/zebra-label-1.1.0.zip`.  If using a self-hosted site, optional credentials can be provided by entering the username and password in the following format.
 ```properties
 user=your user name
 password=your password
@@ -73,8 +73,8 @@ This application is available to the Maximo administrator group (typically MAXAD
 
 ![Application Navigation Menu](images/label-print-nav-menu.png)
 
-# Configure Printers
-Before users can print labels one or more Zebra printers must be configured. Navigate to the `Label Configuration` application and then select the `Manage Printers` option from the `More Actions` menu.
+# Manage Printers
+Before users can print labels one or more Zebra printers must be created. Navigate to the `Label Configuration` application and then select the `Manage Printers` option from the `More Actions` menu.
 
 ![Manage Printers](images/manage-printers.png)
 
@@ -82,7 +82,7 @@ Click the `New Row` button to create a new printer configuration.
 
 ![New Printer](images/new-printer.png)
 
-Enter the printer details with a unique printer name globally identifying the printer, a Storeroom, a host name or IP address, port number and  the media type.  When printing the available printers are filtered based on the current records LOCATION or TOSTORELOC value and available labels are filtered based on compatible media types.
+Enter the printer details with a unique printer name globally identifying the printer, a Storeroom, a host name or IP address, port number and the media type.  When printing the available printers are filtered based on the current records LOCATION or TOSTORELOC value and available labels are filtered based on compatible media types.
 
 ![Printer Details](images/printer-details.png)
 
@@ -99,6 +99,8 @@ Continue to add additional printers as required, then click the `OK` button to s
 | Media       | The media identifier, typically in HxW (2x1, 4x6 etc) format although non-standard identifiers may be used.              |
 | Default?    | Boolean value that indicates that the printer is the default for the storeroom location and will be selected by default. |
 | Site        | The Maximo Site identifier for the storeroom location.                                                                   |
+ | Remote?     | Is the printer on a remote network and using the print agent.                                                            |
+
 
 
 # Configure Labels

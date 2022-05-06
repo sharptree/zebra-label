@@ -27,21 +27,16 @@ public class FldDefaultPrinter extends MboValueAdapter {
         super(mbv);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#validate()
-     */
     @Override
     public void validate() throws MXException, RemoteException {
 
-        MboSetRemote printerSet = getMboValue().getMbo().getMboSet("$printercheck", "STPRINTER", "printer!=:printer and location = :location and siteid = :siteid  and default = :yes");
+        MboSetRemote printerSet = getMboValue().getMbo().getMboSet("$printercheck", "STPRINTER", "printer!=:printer and location = :location and siteid = :siteid  and isdefault = :yes");
         if (!printerSet.isEmpty()) {
             if (getMboValue().getMbo().getUserInfo().isInteractive()) {
                 int userInput = MXApplicationYesNoCancelException.getUserInput("changedefaultprinter", MXServer.getMXServer(), getMboValue().getMbo().getUserInfo());
                 switch (userInput) {
                     case MXApplicationYesNoCancelException.YES:
-                        printerSet.getMbo(0).setValue("DEFAULT", false);
+                        printerSet.getMbo(0).setValue("ISDEFAULT", false);
                         break;
                     case MXApplicationYesNoCancelException.NULL:
                         throw new MXApplicationYesNoCancelException("changedefaultprinter", "sharptree", "changeDefaultPrinter",new String[]{getMboValue("LOCATION").getString()});
@@ -49,7 +44,7 @@ public class FldDefaultPrinter extends MboValueAdapter {
                         getMboValue().setValue(false);
                 }
             } else {
-                printerSet.getMbo(0).setValue("DEFAULT", false);
+                printerSet.getMbo(0).setValue("ISDEFAULT", false);
             }
         }
         super.validate();

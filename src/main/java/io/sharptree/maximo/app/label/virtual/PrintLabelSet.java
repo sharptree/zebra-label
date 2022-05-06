@@ -1,6 +1,7 @@
 package io.sharptree.maximo.app.label.virtual;
 
 import com.ibm.tivoli.maximo.script.ScriptAction;
+import io.sharptree.maximo.LabelLogger;
 import psdi.mbo.*;
 import psdi.server.MXServer;
 import psdi.util.MXApplicationException;
@@ -27,21 +28,12 @@ public class PrintLabelSet extends NonPersistentMboSet {
         super(ms);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboSet#getMboInstance(MboSet)
-     */
     @Override
     protected Mbo getMboInstance(MboSet mboSet) throws MXException, RemoteException {
         return new PrintLabel(mboSet);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see NonPersistentMboSet#execute()
-     */
+    @Override
     public void execute() throws MXException, RemoteException {
         MboRemote printLabel = getMbo(0);
 
@@ -57,7 +49,7 @@ public class PrintLabelSet extends NonPersistentMboSet {
                 Integer.parseInt(MXServer.getMXServer().getProperty("sharptree.zebralabel.maxcount"));
             }
         } catch (Throwable t) {
-            FixedLoggers.APPLOGGER.error("Error parsing property sharptree.zebralabel.maxcount: " + t.getMessage());
+            LabelLogger.LABEL_LOGGER.error("Error parsing property sharptree.zebralabel.maxcount: " + t.getMessage());
         }
 
         if (printLabel.getInt("COUNT") > maxCount) {

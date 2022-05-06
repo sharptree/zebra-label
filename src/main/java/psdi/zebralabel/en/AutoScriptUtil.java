@@ -1,5 +1,7 @@
 package psdi.zebralabel.en;
 
+import com.vdurmont.semver4j.Semver;
+import com.vdurmont.semver4j.SemverException;
 import psdi.configure.UpgConstants;
 import psdi.configure.Util;
 
@@ -50,15 +52,16 @@ public abstract class AutoScriptUtil {
     }
 
     /**
+     * Create a new script if it does not already exist.
      *
-     * @param connection
-     * @param scriptName
-     * @param launchPointName
-     * @param description
-     * @param objectName
-     * @param objectEvent
-     * @param dbIn
-     * @throws Exception
+     * @param connection      the database connection reference.
+     * @param scriptName      the name of the script to create if it does not exist.
+     * @param launchPointName the name of the launch point
+     * @param description     a description of the script.
+     * @param objectName      the name of the object for the launch point.
+     * @param objectEvent     the numeric representation for the event.
+     * @param dbIn            the type of database.
+     * @throws Exception thrown if an error occurs creating the script.
      */
     @SuppressWarnings("unused")
     public static void createOrUpdateObjectLaunchPoint(Connection connection, String scriptName, String launchPointName, String description, String objectName, int objectEvent, int dbIn) throws Exception {
@@ -143,6 +146,18 @@ public abstract class AutoScriptUtil {
         }
     }
 
+
+    /**
+     * Create or update a script if it does not already exist.
+     *
+     * @param connection  the database connection reference.
+     * @param scriptName  the name of the script to create if it does not exist.
+     * @param scriptPath  the path to the script source.
+     * @param description a description of the script.
+     * @param version     the version of the script.
+     * @param dbIn        the type of database.
+     * @throws Exception thrown if an error occurs creating the script.
+     */
     public static void createOrUpdateScript(Connection connection, String scriptName, String scriptPath, String description, String version, int dbIn) throws Exception {
 
         if (connection == null) {
@@ -165,7 +180,7 @@ public abstract class AutoScriptUtil {
             throw new Exception("The dbIn parameter must be 1 for Oracle, 2 for SQLServer, or 3 for DB2");
         }
 
-        PreparedStatement autoScriptCheck = connection.prepareStatement("select 1 from autoscript where autoscript = ?");
+        PreparedStatement autoScriptCheck = connection.prepareStatement("select version from autoscript where autoscript = ?");
         PreparedStatement autoScriptUpdate;
 
         autoScriptUpdate = connection.prepareStatement("update autoscript set source = ?, version = ?, description = ? where autoscript = ?");
@@ -182,6 +197,17 @@ public abstract class AutoScriptUtil {
             autoScriptCheck.setString(1, scriptName);
             resultSet = autoScriptCheck.executeQuery();
             if (resultSet.next()) {
+
+                try {
+                    Semver semver = new Semver(version);
+                    if (semver.isLowerThan(resultSet.getString(1))) {
+                        System.out.println("The script " + scriptName + " with version " + version + " is older than the current version, " + resultSet.getString(1));
+                        return;
+                    }
+                } catch (SemverException e) {
+                    System.out.println("The version new script version " + version + " or current script version " + resultSet.getString(1) + "is not a valid Semantic version, cannot perform comparison");
+                }
+
                 autoScriptUpdate.setString(1, source.toString());
                 autoScriptUpdate.setString(2, version);
                 autoScriptUpdate.setString(3, description);
@@ -301,6 +327,11 @@ public abstract class AutoScriptUtil {
         }
     }
 
+    /**
+     * Close the reader if it is not null and swallow any errors.
+     *
+     * @param reader the reader to close.
+     */
     private static void close(Reader reader) {
         if (reader != null) {
             try {
@@ -311,6 +342,11 @@ public abstract class AutoScriptUtil {
         }
     }
 
+    /**
+     * Close the ResultSet if it is not null and swallow any errors.
+     *
+     * @param resultSet the ResultSet to close.
+     */
     private static void close(ResultSet resultSet) {
         if (resultSet != null) {
             try {
@@ -321,6 +357,11 @@ public abstract class AutoScriptUtil {
         }
     }
 
+    /**
+     * Close the PreparedStatement if it is not null and swallow any errors.
+     *
+     * @param statement the PreparedStatement to close.
+     */
     private static void close(PreparedStatement statement) {
         if (statement != null) {
             try {
@@ -331,6 +372,11 @@ public abstract class AutoScriptUtil {
         }
     }
 
+    /**
+     * Gets the version Java version.
+     *
+     * @return the Java version as an integer.
+     */
     private static int getVersion() {
         String version = System.getProperty("java.version");
         if (version.startsWith("1.")) {

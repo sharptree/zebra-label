@@ -24,11 +24,6 @@ public class FldPrinter extends MboValueAdapter {
         super(mbv);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#getList()
-     */
     @Override
     public MboSetRemote getList() throws MXException, RemoteException {
 
@@ -45,8 +40,12 @@ public class FldPrinter extends MboValueAdapter {
         MboSetRemote alnSet = domain.getMboSet("ALNDOMAINVALUE");
 
         MboSetRemote printerSet;
-        printerSet = getMboValue().getMbo().getMboSet("$stprinter", "STPRINTER", "location = :location and siteid = :siteid");
-
+        MboRemote owner = getMboValue().getMbo().getOwner();
+        if (owner != null && (owner.isBasedOn("ASSET") || owner.isBasedOn("LOCATION"))) {
+            printerSet = getMboValue().getMbo().getMboSet("$stprinter", "STPRINTER", "siteid = :siteid");
+        } else {
+            printerSet = getMboValue().getMbo().getMboSet("$stprinter", "STPRINTER", "location = :location and siteid = :siteid");
+        }
         printerSet.clear();
         printerSet.reset();
 
@@ -67,31 +66,27 @@ public class FldPrinter extends MboValueAdapter {
         if (labelList != null && labelList.count() == 1) {
             getMboValue("LABEL").setValue(labelList.getMbo(0).getString("VALUE"));
         } else {
+            if(labelList!=null) {
+                boolean foundDefault = false;
+                MboRemote label = labelList.moveFirst();
+                while (label != null) {
+                    MboSetRemote labelSet = label.getMboSet("$stlabel", "STLABEL", "label=:value");
 
-            boolean foundDefault = false;
-            MboRemote label = labelList.moveFirst();
-            while (label != null) {
-                MboSetRemote labelSet = label.getMboSet("$stlabel","STLABEL", "label=:value");
-
-                if (!labelSet.isEmpty() && labelSet.getMbo(0).getBoolean("DEFAULT")) {
-                    foundDefault = true;
-                    getMboValue("LABEL").setValue(label.getString("VALUE"));
-                    break;
+                    if (!labelSet.isEmpty() && labelSet.getMbo(0).getBoolean("ISDEFAULT")) {
+                        foundDefault = true;
+                        getMboValue("LABEL").setValue(label.getString("VALUE"));
+                        break;
+                    }
+                    label = labelList.moveNext();
                 }
-                label = labelList.moveNext();
-            }
 
-            if (!foundDefault) {
-                getMboValue("LABEL").setValueNull();
+                if (!foundDefault) {
+                    getMboValue("LABEL").setValueNull();
+                }
             }
         }
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#hasList()
-     */
     @Override
     public boolean hasList() {
         return true;

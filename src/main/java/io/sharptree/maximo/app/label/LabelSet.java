@@ -23,11 +23,6 @@ public class LabelSet extends MboSet {
         super(ms);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see psdi.mbo.MboSet#getMboInstance(psdi.mbo.MboSet)
-     */
     @Override
     protected Mbo getMboInstance(MboSet mboSet) throws RemoteException {
         return new Label(mboSet);

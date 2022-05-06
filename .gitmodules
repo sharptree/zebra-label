@@ -1,3 +1,3 @@
-[submodule "zebra-printing-scripts"]
-	path = src/main/dist/maximo/tools/maximo/classes/psdi/zebralabel/en
+[submodule "src/main/dist/tools/maximo/classes/psdi/zebralabel/en"]
+	path = src/main/dist/tools/maximo/classes/psdi/zebralabel/en
 	url = https://github.com/sharptree/zebra-printing-scripts.git

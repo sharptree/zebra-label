@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_14">
+    <description>Migrate from DEFAULT to ISDEFAULT attribute.</description>
+    <check>
+        <check_query query="select * from maxattribute where objectname = 'STLABEL' and attributename = 'ISDEFAULT' and 'DEFAULT' not in (select attributename from maxattribute where objectname = 'STLABEL' and attributename = 'DEFAULT')"/>
+    </check>
+
+    <statements>
+        <freeform description="">
+            <sql>
+                update stlabel set isdefault = stlabel.default;
+                update stprinter set isdefault = stprinter.default;
+            </sql>
+        </freeform>
+
+        <drop_attributes object="STLABEL">
+            <attrname name="DEFAULT"/>
+        </drop_attributes>
+
+        <drop_attributes object="STPRINTER">
+            <attrname name="DEFAULT"/>
+        </drop_attributes>
+    </statements>
+</script>

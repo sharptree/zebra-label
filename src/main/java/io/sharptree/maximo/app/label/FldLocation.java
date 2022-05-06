@@ -28,11 +28,6 @@ public class FldLocation extends MAXTableDomain {
         this.setErrorMessage("sharptree", "invalidStoreroom");
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MAXTableDomain#setValueFromLookup(MboRemote)
-     */
     @Override
     public void setValueFromLookup(MboRemote sourceMbo) throws MXException, RemoteException {
         if(sourceMbo!=null && sourceMbo.isBasedOn("LOCATIONS")){

@@ -1,5 +1,6 @@
 package io.sharptree.maximo.app.label;
 
+import io.sharptree.maximo.LabelLogger;
 import psdi.mbo.Mbo;
 import psdi.mbo.MboConstants;
 import psdi.mbo.MboSet;
@@ -25,11 +26,6 @@ public class Printer extends Mbo {
         super(ms);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see Mbo#init()
-     */
     @Override
     public void init() throws MXException {
         super.init();
@@ -48,12 +44,7 @@ public class Printer extends Mbo {
             }
         } catch (RemoteException e) {
             // there is nothing we can do about this, but log the error
-            FixedLoggers.APPLOGGER.error(e);
+            LabelLogger.LABEL_LOGGER.error(e);
         }
     }
-
-
-
-
-
 }

@@ -23,14 +23,9 @@ public class FldMedia extends MboValueAdapter {
         super(mbv);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#action()
-     */
     @Override
     public void action() throws MXException, RemoteException {
-        getMboValue("DEFAULT").setValue(false);
+        getMboValue("ISDEFAULT").setValue(false);
         super.action();
     }
 }

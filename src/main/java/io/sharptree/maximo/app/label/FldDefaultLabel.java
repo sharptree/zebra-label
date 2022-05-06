@@ -28,21 +28,16 @@ public class FldDefaultLabel extends MboValueAdapter {
         super(mbv);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#validate()
-     */
     @Override
     public void validate() throws MXException, RemoteException {
         if(getMboValue().getBoolean()) {
-            MboSetRemote LabelSet = getMboValue().getMbo().getMboSet("$labelcheck", "STLABEL", "media = :media and default = :yes and label!=:label");
+            MboSetRemote LabelSet = getMboValue().getMbo().getMboSet("$labelcheck", "STLABEL", "media = :media and isdefault = :yes and label!=:label");
             if (!LabelSet.isEmpty()) {
                 if (getMboValue().getMbo().getUserInfo().isInteractive()) {
                     int userInput = MXApplicationYesNoCancelException.getUserInput("changedefaultlabel", MXServer.getMXServer(), getMboValue().getMbo().getUserInfo());
                     switch (userInput) {
                         case MXApplicationYesNoCancelException.YES:
-                            LabelSet.getMbo(0).setValue("DEFAULT", false, MboConstants.NOVALIDATION);
+                            LabelSet.getMbo(0).setValue("ISDEFAULT", false, MboConstants.NOVALIDATION);
                             break;
                         case MXApplicationYesNoCancelException.NULL:
                             throw new MXApplicationYesNoCancelException("changedefaultlabel", "sharptree", "changeDefaultLabel", new String[]{getMboValue("MEDIA").getString()});
@@ -50,7 +45,7 @@ public class FldDefaultLabel extends MboValueAdapter {
                             getMboValue().setValue(false);
                     }
                 } else {
-                    LabelSet.getMbo(0).setValue("DEFAULT", false);
+                    LabelSet.getMbo(0).setValue("ISDEFAULT", false);
                 }
             }
         }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updatescript version="6.0.0">
+    <app apptype="webclient" id="stlabel">
+        <add container="1646952210609" control="checkbox">
+            <set property="dataattribute" value="remote"/>
+            <set property="id" value="1650057365892"/>
+        </add>
+    </app>
+</updatescript>

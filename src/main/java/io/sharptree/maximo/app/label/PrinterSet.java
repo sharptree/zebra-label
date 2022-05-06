@@ -23,12 +23,6 @@ public class PrinterSet extends MboSet {
         super(ms);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     *
-     * @see MboSet#getMboInstance(MboSet)
-     */
     @Override
     protected Mbo getMboInstance(MboSet mboSet) throws RemoteException {
         return new Printer(mboSet);

@@ -26,11 +26,6 @@ public class FldAddress extends MboValueAdapter {
         super(mbv);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#validate()
-     */
     @Override
     public void validate() throws MXException, RemoteException {
         if (!getMboValue().isNull()) {

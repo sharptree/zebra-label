@@ -2,6 +2,7 @@ package io.sharptree.maximo.app.label;
 
 import psdi.mbo.*;
 import psdi.util.MXException;
+import psdi.util.logging.FixedLoggers;
 
 import java.rmi.RemoteException;
 
@@ -22,11 +23,6 @@ public class Label extends Mbo {
         super(ms);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see Mbo#init()
-     */
     @Override
     public void init() throws MXException {
         setFieldFlag(new String[]{"LABEL", "MEDIA", "ZPL", "USEWITH"}, MboConstants.REQUIRED, true);
@@ -34,17 +30,12 @@ public class Label extends Mbo {
         super.init();
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see Mbo#duplicate()
-     */
     @Override
     public MboRemote duplicate() throws MXException, RemoteException {
         MboRemote newLabel = this.copy();
         newLabel.setValueNull("LABEL");
         newLabel.setValue("DESCRIPTION", getString("DESCRIPTION"));
-        newLabel.setValue("DEFAULT", false);
+        newLabel.setValue("ISDEFAULT", false);
         newLabel.setValue("MEDIA", getString("MEDIA"));
         newLabel.setValue("USEWITH", getString("USEWITH"));
         newLabel.setValue("ZPL", getString("ZPL"));

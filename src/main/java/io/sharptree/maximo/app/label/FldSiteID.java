@@ -25,11 +25,6 @@ public class FldSiteID extends psdi.app.site.FldSiteID {
         super(mbv);
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#action()
-     */
     @Override
     public void action() throws MXException, RemoteException {
         if (!getMboValue().isNull()) {
@@ -44,12 +39,6 @@ public class FldSiteID extends psdi.app.site.FldSiteID {
         super.action();
     }
 
-
-    /**
-     * {@inerhitDoc}
-     *
-     * @see FldSiteID#setValueFromLookup(MboRemote)
-     */
     @Override
     public void setValueFromLookup(MboRemote sourceMbo) throws MXException, RemoteException {
         if (sourceMbo != null && sourceMbo.isBasedOn("SITE")) {

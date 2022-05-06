@@ -1,5 +1,6 @@
 package io.sharptree.maximo.app.label.virtual;
 
+import io.sharptree.maximo.LabelLogger;
 import psdi.mbo.*;
 import psdi.util.MXException;
 import psdi.util.logging.FixedLoggers;
@@ -49,7 +50,7 @@ public class FldLabel extends MboValueAdapter {
             if (getMboValue().getMbo().getOwner() != null) {
                 sqlf.setObject(2, "STLABEL", "USEWITH", getMboValue().getMbo().getOwner().getName());
             } else {
-                FixedLoggers.APPLOGGER.error("The value adapter " + getClass().getName() + " on " + getMboValue().getMbo().getName() + " must have an owner to display a list of available labels.");
+                LabelLogger.LABEL_LOGGER.error("The value adapter " + getClass().getName() + " on " + getMboValue().getMbo().getName() + " must have an owner to display a list of available labels.");
                 sqlf.setObject(2, "STLABEL", "USEWITH", "DUMMY");
             }
 
@@ -70,11 +71,6 @@ public class FldLabel extends MboValueAdapter {
         }
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see MboValueAdapter#hasList()
-     */
     @Override
     public boolean hasList() {
         return true;

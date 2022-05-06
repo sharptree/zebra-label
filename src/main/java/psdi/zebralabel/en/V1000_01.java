@@ -37,11 +37,6 @@ public class V1000_01 extends AutoUpgradeTemplate {
         super.init();
     }
 
-    /**
-     * {@inerhitDoc}
-     *
-     * @see AutoUpgradeTemplate#process()
-     */
     @Override
     protected void process() throws Exception {
         AutoScriptUtil.createOrUpdateScript(con, "STAUTOSCRIPT.ZEBRALABEL.LABELS", "psdi/zebralabel/en/resources/stautoscript.zebralabel.labels.js", "Barcode Label Definitions", "1.0.0", dbIn);
