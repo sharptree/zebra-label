@@ -211,7 +211,7 @@ Don't include a terminator - ; or go.-->
 -->
 	
 
-<!ELEMENT modify_table EMPTY >
+<!ELEMENT modify_table (attrdef+) >
 <!ATTLIST modify_table
 	name CDATA #REQUIRED
 	object CDATA #IMPLIED

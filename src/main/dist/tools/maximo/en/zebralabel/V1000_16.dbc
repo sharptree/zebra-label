@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<script author="Jason VenHuizen" scriptname="V1000_63">
+    <description>Fix the class on the ISDEFAULT attribute for Printers.</description>
+    <check>
+        <check_query query="select 1 from maxattribute where objectname = 'STPRINTER' and classname = 'io.sharptree.maximo.app.label.FldDefaultLabel'"/>
+    </check>
+
+    <statements>
+        <add_attributes object="STPRINTER">
+            <attrdef attribute="ISDEFAULT" title="Default" remarks="Is the default label for the media type?" maxtype="YORN" classname="io.sharptree.maximo.app.label.FldDefaultPrinter" defaultvalue="0" required="true"/>
+        </add_attributes>
+    </statements>
+</script>

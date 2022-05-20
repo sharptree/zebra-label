@@ -5,14 +5,15 @@ plugins {
     distribution
 }
 
+
 group = "io.sharptree"
-version = "1.1.0"
+version = "1.1.1"
 
 val vendor = "Sharptree"
 val product = "zebra-label"
 val distro = "zebra-label"
 
-project.version = "1.1.0"
+project.version = "1.1.1"
 
 tasks.compileJava {
     sourceCompatibility = "1.8"
@@ -189,12 +190,13 @@ dependencies {
      * webclient - classes from the maximouiweb/WEB-INF/classes folder
      * tools - classes from the [SMP_HOME]/maximo/tools/maximo/classes folder
      *
+     *
      * If you are not a Sharptree developer, but have access to a Maximo instance you can zip the required into jar files and
      * places them in the libs directory on this project.  The comment the non-local dependencies.
      */
 
     compileOnly(fileTree( "libs") { listOf("*.jar") })
-
+    
     compileOnly("com.google.code.gson:gson:2.2.4")
 
     /**
