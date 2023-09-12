@@ -30,6 +30,7 @@ public class PrintLabelSet extends NonPersistentMboSet {
 
     @Override
     protected Mbo getMboInstance(MboSet mboSet) throws MXException, RemoteException {
+
         return new PrintLabel(mboSet);
     }
 

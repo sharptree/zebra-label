@@ -5,15 +5,14 @@ plugins {
     distribution
 }
 
-
 group = "io.sharptree"
-version = "1.1.1"
+version = "1.1.2"
 
 val vendor = "Sharptree"
 val product = "zebra-label"
 val distro = "zebra-label"
 
-project.version = "1.1.1"
+project.version = "1.1.2"
 
 tasks.compileJava {
     sourceCompatibility = "1.8"
@@ -154,6 +153,10 @@ tasks.register<Jar>("jar-web") {
 
 tasks.getByName("assemble").dependsOn("jar-web")
 
+tasks.assemble {
+    finalizedBy("fixzip")
+}
+
 tasks.jar {
     manifest {
         attributes(
@@ -176,7 +179,7 @@ dependencies {
     /*
      * Library used for validating host names and IP addresses.
      */
-    implementation("com.google.guava:guava:31.0.1-jre")
+    implementation("com.google.guava:guava:31.1-jre")
 
     /*
      * The javax.servlet-api is required to compile DataBean classes, but is otherwise provided by WebSphere / WebLogic.
@@ -197,6 +200,11 @@ dependencies {
 
     compileOnly(fileTree( "libs") { listOf("*.jar") })
     
+    compileOnly("com.google.code.gson:gson:2.2.4")
+
+    /**
+     * Semantic versioning for checking script versions.
+     */
     compileOnly("com.google.code.gson:gson:2.2.4")
 
     /**

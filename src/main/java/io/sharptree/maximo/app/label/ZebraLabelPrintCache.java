@@ -145,6 +145,7 @@ public class ZebraLabelPrintCache implements MaximoCache {
      */
     private PrinterCfg getPrinter(String printerName) throws RemoteException, MXException {
         ScriptInfo scriptInfo = ScriptCache.getInstance().getScriptInfo(PRINTERS_SCRIPT);
+        ScriptCache.getInstance().reload();
         if (scriptInfo == null) {
             String[] params = new String[]{PRINTERS_SCRIPT};
             throw new MXApplicationException("script", "nosuchscript", params);

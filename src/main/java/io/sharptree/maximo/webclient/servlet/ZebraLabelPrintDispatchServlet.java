@@ -1,18 +1,27 @@
 package io.sharptree.maximo.webclient.servlet;
 
+import com.ibm.tivoli.maximo.oslc.OslcUtils;
+import com.ibm.tivoli.maximo.oslc.provider.*;
 import io.sharptree.maximo.LabelLogger;
 import io.sharptree.maximo.app.label.LabelPrintEvent;
+import psdi.iface.mic.MicUtil;
+import psdi.security.UserInfo;
 import psdi.server.MXServer;
 import psdi.server.event.EventListener;
 import psdi.server.event.EventMessage;
 import psdi.util.MXException;
+import psdi.util.MXSession;
+import psdi.util.MXSystemException;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.SynchronousQueue;
@@ -34,6 +43,8 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
     private final List<LabelPrintDispatch> queues = new ArrayList<>();
     private final Object lock = new Object();
 
+    private MaximoAuthenticator maxAuthenticator;
+
     @Override
     public void init() throws ServletException {
         try {
@@ -42,6 +53,8 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
             //there is nothing to do so just log the error message
             LabelLogger.LABEL_LOGGER.error("Error initializing " + this.getClass().getName() + ", print events will not be handled.", e);
         }
+
+        this.maxAuthenticator = getAuthenticator();
 
         super.init();
     }
@@ -74,7 +87,13 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
         if (eventRegistrationId < 0) {
             throw new ServletException("The print servlet was not initialized and is not handling print requests.");
         }
-
+        OslcRequest oslcRequest = null;
+        try {
+            oslcRequest = initHttpSession(request);
+            authenticateRequest(oslcRequest);
+        }catch(Throwable t){
+            (new OslcErrorHandler((oslcRequest != null) ? oslcRequest.getUserInfo() : null)).handleError(t, request, response);
+        }
         response.setContentType("text/event-stream;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Connection", "keep-alive");
@@ -107,7 +126,7 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
                 } else {
                     // return every 60 seconds so WebSphere doesn't think the thread is hung.  The client will just retry the call.
                     if (LabelLogger.LABEL_LOGGER.isDebugEnabled()) {
-                        LabelLogger.LABEL_LOGGER.debug("Queue polling has timed out, returning and allowing the client print agent to reregister.  Removing dispatch from queues.");
+                        LabelLogger.LABEL_LOGGER.debug("Queue polling has timed out, returning and allowing the client print agent to re-register.  Removing dispatch from queues.");
                     }
                     synchronized (lock) {
                         queues.remove(dispatch);
@@ -143,7 +162,7 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
                 List<LabelPrintDispatch> toRemove = new ArrayList<>();
                 queues.forEach(it -> {
                     try {
-                        if (it.getOutpuStream().isReady()) {
+                        if (it.getOutputStream().isReady()) {
                             if (LabelLogger.LABEL_LOGGER.isDebugEnabled()) {
                                 LabelLogger.LABEL_LOGGER.debug("Posting event to registered queue: " + event);
                             }
@@ -171,7 +190,6 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
                     }
                     toRemove.forEach(queues::remove);
                 }
-
             }
         }
     }
@@ -180,6 +198,63 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
     public void postCommitEventAction(EventMessage eventMessage) {
         // intentionally do nothing
     }
+
+    private OslcRequest initHttpSession(HttpServletRequest request) throws RemoteException, MXException {
+        HttpSession session = request.getSession(true);
+        String enableCsrf = request.getParameter("csrf");
+        if (session.isNew()) {
+            OslcSession oslcSession = new OslcSession();
+            session.setAttribute("oslcsession", oslcSession);
+        } else {
+            if (session.getAttribute("oslcsession") == null) {
+                OslcSession oslcSession = new OslcSession();
+                oslcSession.setMXSession((MXSession)request.getSession().getAttribute("MXSession"));
+                session.setAttribute("oslcsession", oslcSession);
+                if ("1".equals(enableCsrf)) {
+                    oslcSession.setCsrfToken();
+                }
+            } else {
+                OslcSession oslcSession = (OslcSession)session.getAttribute("oslcsession");
+                if ("1".equals(enableCsrf) && oslcSession.getCsrfToken() == null)
+                    oslcSession.setCsrfToken();
+            }
+        }
+
+        return new OslcRequest(request);
+    }
+
+
+    protected void authenticateRequest(OslcRequest oslcRequest) throws MXException, RemoteException {
+        try {
+            this.maxAuthenticator.authenticateRequest(oslcRequest);
+        } catch (MXException e) {
+            UserInfo userInfo = oslcRequest.getUserInfo();
+            if (userInfo == null) {
+                oslcRequest.unbindRESTSession();
+                if (oslcRequest.isNewSession()) {
+                    oslcRequest.invalidateSession();
+                }
+            }
+            throw e;
+        }
+        UserInfo userInfo = oslcRequest.getUserInfo();
+        if (userInfo == null) {
+            oslcRequest.unbindRESTSession();
+            throw new MXSystemException("access", "invaliduser");
+        }
+    }
+
+    protected MaximoAuthenticator getAuthenticator() {
+        String authenticatorClass = MicUtil.getProperty("mxe.api.authenticator");
+        try {
+            return (authenticatorClass == null || authenticatorClass.isEmpty()) ? new MaximoAuthenticatorImpl() : (MaximoAuthenticator)Class.forName(authenticatorClass).getDeclaredConstructor().newInstance();
+        } catch (IllegalAccessException|InstantiationException|ClassNotFoundException|InvocationTargetException|NoSuchMethodException e) {
+            OslcUtils.getLogger().error(e.getMessage(), e);
+            return new MaximoAuthenticatorImpl();
+        }
+    }
+
+
 
     /**
      * Class to hold the label print dispatch queue.
@@ -194,11 +269,11 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
          * Creates a new LabelPrintDispatch Object.
          *
          * @param queue  the queue to notify when a label print event occurs.
-         * @param outpuStream a reference to the output stream, used to check if the client connection is still valid.
+         * @param outputStream a reference to the output stream, used to check if the client connection is still valid.
          */
-        public LabelPrintDispatch(SynchronousQueue<LabelPrintEvent> queue, ServletOutputStream outpuStream) {
+        public LabelPrintDispatch(SynchronousQueue<LabelPrintEvent> queue, ServletOutputStream outputStream) {
             this.queue = queue;
-            this.outputStream = outpuStream;
+            this.outputStream = outputStream;
         }
 
         /**
@@ -213,7 +288,7 @@ public class ZebraLabelPrintDispatchServlet extends HttpServlet implements Event
          * Get the output stream.
          * @return the output stream.
          */
-        public ServletOutputStream getOutpuStream() {
+        public ServletOutputStream getOutputStream() {
             return outputStream;
         }
     }
