@@ -160,7 +160,7 @@ The user can optionally select to print more than one label by entering  a `Coun
 
 # Build
 ## Maximo Dependencies
-To build the *zebra-label* project, you will need the Maximo `businessobjects.jar`, classes from the Maximo maximouiweb classes and the Maximo tools classes. The `businessobjects.jar` file can be obtained by unzipping the `maximo.ear` file and copying the file.
+To build the *zebra-label* project, you will need the Maximo `businessobjects.jar`, `commonweb.jar`, classes from the Maximo maximouiweb classes and the Maximo tools classes. The `businessobjects.jar` and `commonweb.jar` files can be obtained by unzipping the `maximo.ear` file and copying the files.
 
 The Maximo maximouiweb classes are not provided as a jar file and therefore must be created.  Open a terminal (unix) or command (windows) window and navigate to the [SMP_HOME]/maximo/applications/maximo/maximouiweb/webmodule/WEB-INF/classes/ folder.  Run the following command.
 
@@ -172,7 +172,7 @@ The Maximo tools classes are not provided as a jar file and therefore must be cr
 ```shell
 jar cf maximo-tools.jar *
 ```
-Copy the `businessobjects.jar`, `maximo-webclient.jar` and `maximo-tools.jar` to the project's `libs` directory.
+Copy the `businessobjects.jar`, `commonweb.jar`, `maximo-webclient.jar` and `maximo-tools.jar` to the project's `libs` directory.
 
 ## Gradle assembleDist
 To build the project run the gradle `assembleDist` task.
