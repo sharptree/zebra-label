@@ -1,6 +1,9 @@
 package io.sharptree.maximo.app.label;
 
-import psdi.mbo.*;
+import psdi.mbo.Mbo;
+import psdi.mbo.MboConstants;
+import psdi.mbo.MboRemote;
+import psdi.mbo.MboSet;
 import psdi.util.MXException;
 import psdi.util.logging.FixedLoggers;
 

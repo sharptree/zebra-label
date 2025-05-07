@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script SYSTEM "script.dtd">
+<!--suppress CheckValidXmlInScriptTagBody -->
 <script author="Jason VenHuizen" scriptname="uninstall-shared" >
     <description>Uninstall Zebra Barcode components that are shared with Opqo if Opqo is not installed.</description>
 

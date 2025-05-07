@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<!--suppress CheckValidXmlInScriptTagBody -->
+<script author="Jason VenHuizen" scriptname="V1000_18">
+    <description>Fix the print confirmation message.</description>
+    <statements>
+        <freeform description="Update the print confirmation message.">
+            <sql>
+                update maxmessages set value = 'Label for {0} {1} printed.' where msggroup = 'sharptree' and msgkey = 'labelPrinted'
+            </sql>
+        </freeform>
+    </statements>
+</script>

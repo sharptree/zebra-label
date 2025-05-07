@@ -31,7 +31,7 @@ public class FldDefaultLabel extends MboValueAdapter {
     @Override
     public void validate() throws MXException, RemoteException {
         if(getMboValue().getBoolean()) {
-            MboSetRemote LabelSet = getMboValue().getMbo().getMboSet("$labelcheck", "STLABEL", "media = :media and isdefault = :yes and label!=:label");
+            MboSetRemote LabelSet = getMboValue().getMbo().getMboSet("$labelcheck", "STLABEL", "media = :media and isdefault = :yes and usewith =:usewith and label!=:label");
             if (!LabelSet.isEmpty()) {
                 if (getMboValue().getMbo().getUserInfo().isInteractive()) {
                     int userInput = MXApplicationYesNoCancelException.getUserInput("changedefaultlabel", MXServer.getMXServer(), getMboValue().getMbo().getUserInfo());

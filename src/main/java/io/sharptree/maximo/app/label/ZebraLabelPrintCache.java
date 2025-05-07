@@ -63,6 +63,7 @@ public class ZebraLabelPrintCache implements MaximoCache {
      */
     @Override
     public void reload() throws MXException {
+        reload(null);
     }
 
     /**

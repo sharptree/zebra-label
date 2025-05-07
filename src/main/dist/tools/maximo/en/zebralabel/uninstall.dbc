@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script SYSTEM "script.dtd">
+<!--suppress CheckValidXmlInScriptTagBody -->
 <script author="Jason VenHuizen" scriptname="uninstall" >
     <description>Uninstall Zebra Barcode.</description>
 
@@ -29,6 +30,8 @@
                 delete maxmenu where keyvalue = 'STLABEL';
                 delete sigoption where app = 'STLABEL';
                 delete applicationauth where app = 'STLABEL';
+                delete sigoption where optionname = 'ZEBRALABELPRINT';
+                delete applicationauth where optionname = 'ZEBRALABELPRINT';
                 delete maxlogger where logkey LIKE 'log4j.logger.maximo.sharptree.label%';
                 delete maxlogger where logkey = 'log4j.logger.maximo.sharptree' AND NOT EXISTS (SELECT 1 FROM maxlogger WHERE logkey LIKE 'log4j.logger.maximo.sharptree%'  AND logkey != 'log4j.logger.maximo.sharptree' );
                 DELETE MAXOBJECT m WHERE OBJECTNAME  = 'STPRINTLABEL';

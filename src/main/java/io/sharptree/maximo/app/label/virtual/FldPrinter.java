@@ -41,7 +41,7 @@ public class FldPrinter extends MboValueAdapter {
 
         MboSetRemote printerSet;
         MboRemote owner = getMboValue().getMbo().getOwner();
-        if (owner != null && (owner.isBasedOn("ASSET") || owner.isBasedOn("LOCATION"))) {
+        if (owner != null && (owner.isBasedOn("ASSET") || owner.isBasedOn("LOCATIONS") || owner.isBasedOn("WORKORDER"))) {
             printerSet = getMboValue().getMbo().getMboSet("$stprinter", "STPRINTER", "siteid = :siteid");
         } else {
             printerSet = getMboValue().getMbo().getMboSet("$stprinter", "STPRINTER", "location = :location and siteid = :siteid");

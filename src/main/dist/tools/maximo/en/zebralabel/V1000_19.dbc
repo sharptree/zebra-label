@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script SYSTEM "script.dtd">
+<!--suppress CheckValidXmlInScriptTagBody -->
+<script author="Jason VenHuizen" scriptname="V1000_19">
+    <description>Remove need for license file.</description>
+    <statements>
+        <freeform description="Update the app type to CUSTAPP to remove need for license file.">
+            <sql>
+                update maxapps set originalapp = 'CUSTAPP' where app = 'STLABEL'
+            </sql>
+        </freeform>
+    </statements>
+</script>

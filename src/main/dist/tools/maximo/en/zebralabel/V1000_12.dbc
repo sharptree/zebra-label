@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script SYSTEM "script.dtd">
+<!--suppress CheckValidXmlInScriptTagBody -->
 <script author="Jason VenHuizen" scriptname="V1000_12">
     <description>Add Asset and Location Barcode Printing.</description>
     <statements>

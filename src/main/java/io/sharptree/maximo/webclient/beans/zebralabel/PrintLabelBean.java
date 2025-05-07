@@ -1,6 +1,5 @@
 package io.sharptree.maximo.webclient.beans.zebralabel;
 
-import io.sharptree.maximo.app.label.virtual.PrintLabelSet;
 import psdi.mbo.Mbo;
 import psdi.mbo.MboRemote;
 import psdi.mbo.MboSetRemote;
@@ -45,11 +44,6 @@ public class PrintLabelBean extends DataBean {
                         printLabel.setValue("PRINTER", printer.getString("PRINTER"));
                         printLabel.setValue("LABEL", label.getString("LABEL"));
 
-                        if (getMboSet().getName().equals("STPRINTLABEL")) {
-                            String[] args = new String[]{getMboSet().getMbo().getOwner().getString("ITEMNUM")};
-                            ((PrintLabelSet) getMboSet()).execute();
-                            clientSession.showMessageBox("sharptree", "labelPrinted", args);
-                        }
                     }
                 }
             }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script SYSTEM "script.dtd">
-<script author="Jason VenHuizen" scriptname="V1000_11">
+<!--suppress CheckValidXmlInScriptTagBody -->
+<script author="Jason VenHuizen" scriptname="V1000_15">
     <description>Barcode Printing Automation Script Updates</description>
     <statements>
     </statements>

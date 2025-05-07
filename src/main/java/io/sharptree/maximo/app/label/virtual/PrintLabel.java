@@ -51,10 +51,10 @@ public class PrintLabel extends NonPersistentMbo {
             }
 
             MboSetRemote printerSet;
-            if(getOwner()!=null && (getOwner().isBasedOn("ASSET") || getOwner().isBasedOn("LOCATION"))){
+            if(getOwner()!=null && (getOwner().isBasedOn("ASSET") || getOwner().isBasedOn("LOCATIONS") || getOwner().isBasedOn("WORKORDER"))) {
                 printerSet = getMboSet("$stprinter", "STPRINTER", "siteid = :siteid and isdefault = :yes");
             }else {
-                printerSet = getMboSet("$stprinter", "STPRINTER", "location = :location and siteid = :siteid and isdefault = :yes");
+                printerSet = getMboSet("$stprinter", "STPRINTER", "location = :location and siteid = :siteid and isdefault = :yes ");
             }
             printerSet.clear();
             printerSet.reset();
@@ -63,7 +63,7 @@ public class PrintLabel extends NonPersistentMbo {
                 MboRemote printer = printerSet.moveFirst();
                 setValue("PRINTER", printer.getString("PRINTER"));
 
-                MboSetRemote labelSet = printer.getMboSet("$stlabel","STLABEL", "media = :media and isdefault = :yes and usewith = '" + getOwner().getName() + "'");
+                MboSetRemote labelSet = printer.getMboSet("$stlabel","STLABEL", "media = :media and isdefault = :yes and usewith = :&OWNERNAME&");
                 if(!labelSet.isEmpty()){
                     setValue("LABEL", labelSet.moveFirst().getString("LABEL"));
                 }

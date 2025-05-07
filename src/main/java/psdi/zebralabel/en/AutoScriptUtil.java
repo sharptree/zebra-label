@@ -310,13 +310,17 @@ public abstract class AutoScriptUtil {
     }
 
     private static long getNextId(Connection connection, String sequenceName, int dbIn, Util util) throws Exception {
-        if (dbIn == UpgConstants.SQLSERVER) {
+        if(!util.nativeSequenceExists(sequenceName)) {
             return Long.parseLong(util.getNextSequenceValueForSqlServer(sequenceName));
         } else {
+            String statement = dbIn == UpgConstants.SQLSERVER
+                    ? "select next value for " + sequenceName + " from dummy_table"
+                    : "select " + sequenceName + ".nextval from dummy_table";
+
             PreparedStatement nextIdStatement = null;
             ResultSet resultSet = null;
             try {
-                nextIdStatement = connection.prepareStatement("select " + sequenceName + ".nextval from dummy_table");
+                nextIdStatement = connection.prepareStatement(statement);
                 resultSet = nextIdStatement.executeQuery();
                 resultSet.next();
                 return resultSet.getLong(1);

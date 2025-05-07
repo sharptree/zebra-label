@@ -43,7 +43,7 @@
         <Display method="STATUS">
             <Option>MSG_BTNOK</Option>
         </Display>
-        <MsgText>Label for item {0} printed.</MsgText>
+        <MsgText>Label for {0} {1} printed.</MsgText>
         <Explanation></Explanation>
         <AdminResponse></AdminResponse>
         <OperatorResponse></OperatorResponse>
